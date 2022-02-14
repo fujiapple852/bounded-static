@@ -1,0 +1,8 @@
+[package]
+name = "bounded_static"
+version = "0.1.0"
+authors = ["FujiApple <fujiapple852@gmail.com>"]
+description = ""
+repository = "https://github.com/fujiapple852/bounded_static"
+license = "Apache-2.0"
+edition = "2021"
