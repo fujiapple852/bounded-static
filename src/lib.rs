@@ -18,6 +18,7 @@ use std::hash::{BuildHasher, Hash};
 /// >
 /// > `T: 'static'` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
 pub trait ToStaticBounded {
+    /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
 
     /// Convert an `&T` to an owned `T` such that `T: 'static`.
@@ -26,6 +27,7 @@ pub trait ToStaticBounded {
 
 /// A trait for converting an owned `T` into an owned `T` such that `T: 'static`.
 pub trait IntoStaticBounded {
+    /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
 
     /// Convert an owned `T` into an owned `T` such that `T: 'static`.
