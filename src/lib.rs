@@ -1,3 +1,7 @@
+#![warn(clippy::all, clippy::pedantic, clippy::nursery, rust_2018_idioms)]
+#![allow(clippy::missing_const_for_fn)]
+#![forbid(unsafe_code)]
+
 use std::borrow::Cow;
 use std::collections::HashMap;
 use std::hash::{BuildHasher, Hash};
@@ -178,7 +182,7 @@ impl IntoStaticBounded for &'static str {
 
 /// [`ToStaticBounded`] impl for `String`.
 impl ToStaticBounded for String {
-    type Static = String;
+    type Static = Self;
 
     fn to_static(&self) -> Self::Static {
         self.clone()
@@ -187,7 +191,7 @@ impl ToStaticBounded for String {
 
 /// No-op [`IntoStaticBounded`] impl for `String`.
 impl IntoStaticBounded for String {
-    type Static = String;
+    type Static = Self;
 
     fn into_static(self) -> Self::Static {
         self
@@ -312,18 +316,18 @@ mod tests {
     #[test]
     fn test_cow_to_static() {
         let s = String::from("");
-        let s_cow: Cow<str> = Cow::Borrowed(&s);
-        let s1_cow_owned: Cow<str> = s_cow.to_static();
-        let s2_cow_owned: Cow<str> = Cow::Owned(s_cow.into_owned());
+        let s_cow: Cow<'_, str> = Cow::Borrowed(&s);
+        let s1_cow_owned: Cow<'_, str> = s_cow.to_static();
+        let s2_cow_owned: Cow<'_, str> = Cow::Owned(s_cow.into_owned());
         assert_eq!(s1_cow_owned, s2_cow_owned);
     }
 
     #[test]
     fn test_cow_into_static() {
         let s = String::from("");
-        let s_cow: Cow<str> = Cow::Borrowed(&s);
-        let s1_cow_owned: Cow<str> = s_cow.clone().into_static();
-        let s2_cow_owned: Cow<str> = Cow::Owned(s_cow.into_owned());
+        let s_cow: Cow<'_, str> = Cow::Borrowed(&s);
+        let s1_cow_owned: Cow<'_, str> = s_cow.clone().into_static();
+        let s2_cow_owned: Cow<'_, str> = Cow::Owned(s_cow.into_owned());
         assert_eq!(s1_cow_owned, s2_cow_owned);
     }
 
@@ -372,7 +376,7 @@ mod tests {
 
     #[test]
     fn test_option_none() {
-        let value: Option<Cow<str>> = None;
+        let value: Option<Cow<'_, str>> = None;
         let to_static = value.to_static();
         ensure_static(to_static);
     }
@@ -431,7 +435,7 @@ mod tests {
         #[derive(Copy, Clone)]
         struct Foo {}
         impl ToStaticBounded for Foo {
-            type Static = Foo;
+            type Static = Self;
 
             fn to_static(&self) -> Self::Static {
                 *self
@@ -469,8 +473,8 @@ mod tests {
     #[test]
     fn test_cow_cow() {
         let s = String::from("");
-        let value1: Cow<str> = Cow::Borrowed(&s);
-        let value2: Cow<Cow<str>> = Cow::Borrowed(&value1);
+        let value1: Cow<'_, str> = Cow::Borrowed(&s);
+        let value2: Cow<'_, Cow<'_, str>> = Cow::Borrowed(&value1);
         // TODO need to `into_owned()` here
         let to_static = value2.into_owned().to_static();
         ensure_static(to_static);
