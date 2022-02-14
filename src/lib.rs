@@ -22,6 +22,7 @@ pub trait ToStaticBounded {
     type Static: 'static;
 
     /// Convert an `&T` to an owned `T` such that `T: 'static`.
+    #[must_use = "converting is often expensive and is not expected to have side effects"]
     fn to_static(&self) -> Self::Static;
 }
 
@@ -31,6 +32,7 @@ pub trait IntoStaticBounded {
     type Static: 'static;
 
     /// Convert an owned `T` into an owned `T` such that `T: 'static`.
+    #[must_use = "converting is often expensive and is not expected to have side effects"]
     fn into_static(self) -> Self::Static;
 }
 
