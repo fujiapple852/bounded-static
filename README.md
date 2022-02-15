@@ -1,6 +1,6 @@
 # Bounded Static
 
-An experimental crate that defines the `ToStaticBounded` and `IntoStaticBounded` traits and provides impls for common
+An experimental crate that defines the `ToBoundedStatic` and `IntoBoundedStatic` traits and provides impls for common
 types from the Rust standard library.
 
 As described in
@@ -13,17 +13,17 @@ the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-
 >
 > `T: 'static` should be read as _"`T` is bounded by a `'static` lifetime"_ not _"`T` has a `'static` lifetime"_.
 
-The traits `ToStaticBounded` and `IntoStaticBounded` each define an associated type which is bounded by `'static` and 
+The traits `ToBoundedStatic` and `IntoBoundedStatic` each define an associated type which is bounded by `'static` and 
 provide a method to convert to that bounded type:
 
 ```rust
-pub trait ToStaticBounded {
+pub trait ToBoundedStatic {
     type Static: 'static;
     
     fn to_static(&self) -> Self::Static;
 }
 
-pub trait IntoStaticBounded {
+pub trait IntoBoundedStatic {
     type Static: 'static;
 
     fn into_static(self) -> Self::Static;
@@ -36,7 +36,7 @@ Experimental
 
 ## Implementations
 
-Implementations of `ToStaticBounded` and `IntoStaticBounded` are provided for the following standard library types:
+Implementations of `ToBoundedStatic` and `IntoBoundedStatic` are provided for the following standard library types:
 
 - [Cow<T>](https://doc.rust-lang.org/std/borrow/enum.Cow.html)
 - [Box<T>](https://doc.rust-lang.org/std/boxed/struct.Box.html)
@@ -95,10 +95,10 @@ And a function which requires its argument is bounded by the `'static` lifetime:
 fn ensure_static<T: 'static>(_: T) {}
 ```
 
-We can impl `ToStaticBounded` for `Foo<'_>`:
+We can impl `ToBoundedStatic` for `Foo<'_>`:
 
 ```rust
-impl ToStaticBounded for Foo<'_> {
+impl ToBoundedStatic for Foo<'_> {
     type Static = Foo<'static>;
 
     fn to_static(&self) -> Self::Static {
@@ -119,13 +119,13 @@ fn test() {
 }
 ```
 
-### Deriving `ToStaticBounded` and `IntoStaticBounded`
+### Deriving `ToBoundedStatic` and `IntoBoundedStatic`
 
-Both the `ToStaticBounded` and the `IntoStaticBounded` traits may be automatically derived using the custom derive
+Both the `ToBoundedStatic` and the `IntoBoundedStatic` traits may be automatically derived using the custom derive
 marcos provided in the `bounded_static_derive` crate:
 
 ```rust
-#[derive(bounded_static_derive::ToStaticBounded)]
+#[derive(bounded_static_derive::ToBoundedStatic)]
 struct Foo<'a> {
     bar: Cow<'a, str>,
     baz: Vec<Cow<'a, str>>,

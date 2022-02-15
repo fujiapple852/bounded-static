@@ -17,7 +17,7 @@ use std::hash::{BuildHasher, Hash};
 /// > therefore the owner can safely hold onto the data indefinitely long, including up until the end of the program.
 /// >
 /// > `T: 'static'` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
-pub trait ToStaticBounded {
+pub trait ToBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
 
@@ -27,7 +27,7 @@ pub trait ToStaticBounded {
 }
 
 /// A trait for converting an owned `T` into an owned `T` such that `T: 'static`.
-pub trait IntoStaticBounded {
+pub trait IntoBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
 
@@ -36,8 +36,8 @@ pub trait IntoStaticBounded {
     fn into_static(self) -> Self::Static;
 }
 
-/// Blanket [`ToStaticBounded`] impl for converting `Cow<'a, T: ?Sized>` to `Cow<'static, T: ?Sized>`.
-impl<T> ToStaticBounded for Cow<'_, T>
+/// Blanket [`ToBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` to `Cow<'static, T: ?Sized>`.
+impl<T> ToBoundedStatic for Cow<'_, T>
 where
     T: 'static + ToOwned + ?Sized,
 {
@@ -48,8 +48,8 @@ where
     }
 }
 
-/// Blanket [`IntoStaticBounded`] impl for converting `Cow<'a, T: ?Sized>` into `Cow<'static, T: ?Sized>`.
-impl<T> IntoStaticBounded for Cow<'_, T>
+/// Blanket [`IntoBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` into `Cow<'static, T: ?Sized>`.
+impl<T> IntoBoundedStatic for Cow<'_, T>
 where
     T: 'static + ToOwned + ?Sized,
 {
@@ -60,38 +60,38 @@ where
     }
 }
 
-/// Blanket [`ToStaticBounded`] impl for converting `Vec<T>` to `Vec<T>: 'static`.
-impl<T> ToStaticBounded for Vec<T>
+/// Blanket [`ToBoundedStatic`] impl for converting `Vec<T>` to `Vec<T>: 'static`.
+impl<T> ToBoundedStatic for Vec<T>
 where
-    T: ToStaticBounded,
+    T: ToBoundedStatic,
 {
     type Static = Vec<T::Static>;
 
     fn to_static(&self) -> Self::Static {
-        self.iter().map(ToStaticBounded::to_static).collect()
+        self.iter().map(ToBoundedStatic::to_static).collect()
     }
 }
 
-/// Blanket [`IntoStaticBounded`] impl for converting `Vec<T>` into `Vec<T>: 'static`.
-impl<T> IntoStaticBounded for Vec<T>
+/// Blanket [`IntoBoundedStatic`] impl for converting `Vec<T>` into `Vec<T>: 'static`.
+impl<T> IntoBoundedStatic for Vec<T>
 where
-    T: IntoStaticBounded,
+    T: IntoBoundedStatic,
 {
     type Static = Vec<T::Static>;
 
     fn into_static(self) -> Self::Static {
         self.into_iter()
-            .map(IntoStaticBounded::into_static)
+            .map(IntoBoundedStatic::into_static)
             .collect()
     }
 }
 
-/// Blanket [`ToStaticBounded`] impl for converting `HashMap<K, V>` to `HashMap<K, V>: 'static`.
-impl<K, V, S: BuildHasher> ToStaticBounded for HashMap<K, V, S>
+/// Blanket [`ToBoundedStatic`] impl for converting `HashMap<K, V>` to `HashMap<K, V>: 'static`.
+impl<K, V, S: BuildHasher> ToBoundedStatic for HashMap<K, V, S>
 where
-    K: ToStaticBounded,
+    K: ToBoundedStatic,
     K::Static: Eq + Hash,
-    V: ToStaticBounded,
+    V: ToBoundedStatic,
 {
     type Static = HashMap<K::Static, V::Static>;
 
@@ -102,12 +102,12 @@ where
     }
 }
 
-/// Blanket [`IntoStaticBounded`] impl for for converting `HashMap<K, V>` into `HashMap<K, V>: 'static`.
-impl<K, V, S: BuildHasher> IntoStaticBounded for HashMap<K, V, S>
+/// Blanket [`IntoBoundedStatic`] impl for for converting `HashMap<K, V>` into `HashMap<K, V>: 'static`.
+impl<K, V, S: BuildHasher> IntoBoundedStatic for HashMap<K, V, S>
 where
-    K: IntoStaticBounded,
+    K: IntoBoundedStatic,
     K::Static: Eq + Hash,
-    V: IntoStaticBounded,
+    V: IntoBoundedStatic,
 {
     type Static = HashMap<K::Static, V::Static>;
 
@@ -118,34 +118,34 @@ where
     }
 }
 
-/// Blanket [`ToStaticBounded`] impl for converting `Option<T>` to `Option<T>: 'static`.
-impl<T> ToStaticBounded for Option<T>
+/// Blanket [`ToBoundedStatic`] impl for converting `Option<T>` to `Option<T>: 'static`.
+impl<T> ToBoundedStatic for Option<T>
 where
-    T: ToStaticBounded,
+    T: ToBoundedStatic,
 {
     type Static = Option<T::Static>;
 
     fn to_static(&self) -> Self::Static {
-        self.as_ref().map(ToStaticBounded::to_static)
+        self.as_ref().map(ToBoundedStatic::to_static)
     }
 }
 
-/// Blanket [`IntoStaticBounded`] impl for converting `Option<T>` into `Option<T>: 'static`.
-impl<T> IntoStaticBounded for Option<T>
+/// Blanket [`IntoBoundedStatic`] impl for converting `Option<T>` into `Option<T>: 'static`.
+impl<T> IntoBoundedStatic for Option<T>
 where
-    T: IntoStaticBounded,
+    T: IntoBoundedStatic,
 {
     type Static = Option<T::Static>;
 
     fn into_static(self) -> Self::Static {
-        self.map(IntoStaticBounded::into_static)
+        self.map(IntoBoundedStatic::into_static)
     }
 }
 
-/// Blanket [`ToStaticBounded`] impl for converting `Box<T>` to `Box<T>: 'static`.
-impl<T> ToStaticBounded for Box<T>
+/// Blanket [`ToBoundedStatic`] impl for converting `Box<T>` to `Box<T>: 'static`.
+impl<T> ToBoundedStatic for Box<T>
 where
-    T: ToStaticBounded,
+    T: ToBoundedStatic,
 {
     type Static = Box<T::Static>;
 
@@ -154,10 +154,10 @@ where
     }
 }
 
-/// Blanket [`IntoStaticBounded`] impl for converting `Box<T>` into `Box<T>: 'static`.
-impl<T> IntoStaticBounded for Box<T>
+/// Blanket [`IntoBoundedStatic`] impl for converting `Box<T>` into `Box<T>: 'static`.
+impl<T> IntoBoundedStatic for Box<T>
 where
-    T: IntoStaticBounded,
+    T: IntoBoundedStatic,
 {
     type Static = Box<T::Static>;
 
@@ -166,8 +166,8 @@ where
     }
 }
 
-/// No-op [`ToStaticBounded`] impl for converting `&'static str` to `&'static str`.
-impl ToStaticBounded for &'static str {
+/// No-op [`ToBoundedStatic`] impl for converting `&'static str` to `&'static str`.
+impl ToBoundedStatic for &'static str {
     type Static = &'static str;
 
     fn to_static(&self) -> Self::Static {
@@ -175,8 +175,8 @@ impl ToStaticBounded for &'static str {
     }
 }
 
-/// No-op [`IntoStaticBounded`] impl for converting `&'static str` into `&'static str`.
-impl IntoStaticBounded for &'static str {
+/// No-op [`IntoBoundedStatic`] impl for converting `&'static str` into `&'static str`.
+impl IntoBoundedStatic for &'static str {
     type Static = &'static str;
 
     fn into_static(self) -> Self::Static {
@@ -184,8 +184,8 @@ impl IntoStaticBounded for &'static str {
     }
 }
 
-/// [`ToStaticBounded`] impl for `String`.
-impl ToStaticBounded for String {
+/// [`ToBoundedStatic`] impl for `String`.
+impl ToBoundedStatic for String {
     type Static = Self;
 
     fn to_static(&self) -> Self::Static {
@@ -193,8 +193,8 @@ impl ToStaticBounded for String {
     }
 }
 
-/// No-op [`IntoStaticBounded`] impl for `String`.
-impl IntoStaticBounded for String {
+/// No-op [`IntoBoundedStatic`] impl for `String`.
+impl IntoBoundedStatic for String {
     type Static = Self;
 
     fn into_static(self) -> Self::Static {
@@ -202,17 +202,17 @@ impl IntoStaticBounded for String {
     }
 }
 
-/// No-op [`ToStaticBounded`] and [`IntoStaticBounded`] impls for primitive types.
+/// No-op [`ToBoundedStatic`] and [`IntoBoundedStatic`] impls for primitive types.
 macro_rules! make_primitive_impl {
     ($id:ident) => {
-        impl ToStaticBounded for $id {
+        impl ToBoundedStatic for $id {
             type Static = $id;
 
             fn to_static(&self) -> Self::Static {
                 *self
             }
         }
-        impl IntoStaticBounded for $id {
+        impl IntoBoundedStatic for $id {
             type Static = $id;
 
             fn into_static(self) -> Self::Static {
@@ -438,7 +438,7 @@ mod tests {
     fn test_cow_struct() {
         #[derive(Copy, Clone)]
         struct Foo {}
-        impl ToStaticBounded for Foo {
+        impl ToBoundedStatic for Foo {
             type Static = Self;
 
             fn to_static(&self) -> Self::Static {
@@ -457,7 +457,7 @@ mod tests {
         struct Foo<'a> {
             foo: Cow<'a, str>,
         }
-        impl ToStaticBounded for Foo<'_> {
+        impl ToBoundedStatic for Foo<'_> {
             type Static = Foo<'static>;
 
             fn to_static(&self) -> Self::Static {
@@ -489,7 +489,7 @@ mod tests {
         struct Foo<'a> {
             foo: Cow<'a, str>,
         }
-        impl ToStaticBounded for Foo<'_> {
+        impl ToBoundedStatic for Foo<'_> {
             type Static = Foo<'static>;
 
             fn to_static(&self) -> Self::Static {
@@ -509,7 +509,7 @@ mod tests {
         struct Foo<'a> {
             foo: Cow<'a, str>,
         }
-        impl ToStaticBounded for Foo<'_> {
+        impl ToBoundedStatic for Foo<'_> {
             type Static = Foo<'static>;
 
             fn to_static(&self) -> Self::Static {
@@ -531,7 +531,7 @@ mod tests {
             bar: Cow<'a, str>,
             baz: Vec<Cow<'a, str>>,
         }
-        impl ToStaticBounded for Foo<'_> {
+        impl ToBoundedStatic for Foo<'_> {
             type Static = Foo<'static>;
 
             fn to_static(&self) -> Self::Static {
@@ -558,7 +558,7 @@ mod tests {
             owned_str: String,
             cow_str: Cow<'a, str>,
         }
-        impl ToStaticBounded for Foo<'_> {
+        impl ToBoundedStatic for Foo<'_> {
             type Static = Foo<'static>;
 
             fn to_static(&self) -> Self::Static {
