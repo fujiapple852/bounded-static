@@ -1,5 +1,5 @@
 [package]
-name = "bounded_static"
+name = "bounded-static"
 version = "0.1.0"
 authors = ["FujiApple <fujiapple852@gmail.com>"]
 description = ""
