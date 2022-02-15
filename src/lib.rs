@@ -8,14 +8,8 @@ use std::hash::{BuildHasher, Hash};
 
 /// A trait for converting `&T` to an owned `T` such that `T: 'static`.
 ///
-/// As described [here](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
+/// As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
 ///
-/// > `T: 'static` is some `T` that can be safely held indefinitely long, including up until the end of the program.
-/// > `T: 'static` includes all `&'static T` however it also includes all owned types, like `String`, `Vec`, etc.
-/// >
-/// > The owner of some data is guaranteed that data will never get invalidated as long as the owner holds onto it,
-/// > therefore the owner can safely hold onto the data indefinitely long, including up until the end of the program.
-/// >
 /// > `T: 'static'` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
 pub trait ToBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
@@ -27,6 +21,10 @@ pub trait ToBoundedStatic {
 }
 
 /// A trait for converting an owned `T` into an owned `T` such that `T: 'static`.
+///
+/// As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
+///
+/// > `T: 'static'` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
 pub trait IntoBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;

@@ -6,11 +6,6 @@ types from the Rust standard library.
 As described in
 the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
 
-> `T: 'static` is some `T` that can be safely held indefinitely long, including up until the end of the program.
-> `T: 'static` includes all `&'static T` however it also includes all owned types, like `String`, `Vec`, etc.  The
-> owner of some data is guaranteed that data will never get invalidated as long as the owner holds onto it,
-> therefore the owner can safely hold onto the data indefinitely long, including up until the end of the program.
->
 > `T: 'static` should be read as _"`T` is bounded by a `'static` lifetime"_ not _"`T` has a `'static` lifetime"_.
 
 The traits `ToBoundedStatic` and `IntoBoundedStatic` each define an associated type which is bounded by `'static` and 
@@ -153,7 +148,7 @@ fn main() {
 
     fn ensure_static<T: 'static>(_: T) {}
 
-    let s = String::from("");
+    let s = String::from("data");
     let foo = Foo { foo: Cow::from(&s) };
     ensure_static(foo.to_owned())
 }
