@@ -18,3 +18,13 @@ collections = [ "alloc" ]
 
 # Enable impls of [To|Into]BoundedStatic for other types in std.
 std = [ "alloc" ]
+
+# Enable the ToStatic custom derive macro.
+derive = [ "bounded-static-derive" ]
+
+[workspace]
+resolver = "2"
+members = [ "bounded_static_derive" ]
+
+[dependencies]
+bounded-static-derive = { version = "0.1.0", path = "bounded_static_derive", optional = true }

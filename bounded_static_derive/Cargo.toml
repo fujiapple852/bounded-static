@@ -1,0 +1,19 @@
+[package]
+name = "bounded-static-derive"
+version = "0.1.0"
+authors = ["FujiApple <fujiapple852@gmail.com>"]
+description = "custom macro to derive ToBoundedStatic and IntoBoundedStatic traits"
+repository = "https://github.com/fujiapple852/bounded_static"
+license = "Apache-2.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0.86", features = ["full", "visit-mut"] }
+quote = "1.0.15"
+proc-macro2 = "1.0.36"
+
+[dev-dependencies]
+bounded-static = { version = "0.1.0", path = "..", features = [ "derive" ] }

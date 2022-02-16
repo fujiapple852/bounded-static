@@ -20,11 +20,15 @@ use alloc::{
 #[cfg(feature = "collections")]
 use alloc::collections::{BTreeMap, BTreeSet, BinaryHeap, LinkedList, VecDeque};
 
+#[cfg(feature = "derive")]
+/// Re-export for the custom derive macro `ToStatic`.
+pub use bounded_static_derive::ToStatic;
+
 /// A trait for converting `&T` to an owned `T` such that `T: 'static`.
 ///
 /// As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
 ///
-/// > `T: 'static'` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
+/// > `T: 'static` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
 pub trait ToBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
@@ -38,7 +42,7 @@ pub trait ToBoundedStatic {
 ///
 /// As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
 ///
-/// > `T: 'static'` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
+/// > `T: 'static` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
 pub trait IntoBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
