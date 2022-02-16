@@ -3,7 +3,7 @@
 # Bounded Static
 
 An experimental crate that defines the `ToBoundedStatic` and `IntoBoundedStatic` traits and provides impls for common
-types from the Rust standard library.
+types.  This crate has zero-dependencies, is `no_std` friendly & forbids `unsafe` code.
 
 As described in
 the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
@@ -31,15 +31,24 @@ pub trait IntoBoundedStatic {
 
 Experimental
 
-## Implementations
+## Features
 
-Implementations of `ToBoundedStatic` and `IntoBoundedStatic` are provided for the following standard library types:
+Implementations of `ToBoundedStatic` and `IntoBoundedStatic` are provided for the following `core` types:
 
-- [Cow<T>](https://doc.rust-lang.org/std/borrow/enum.Cow.html)
-- [Box<T>](https://doc.rust-lang.org/std/boxed/struct.Box.html)
-- [Option<T>](https://doc.rust-lang.org/std/option/enum.Option.html)
-- [Vec<T>](https://doc.rust-lang.org/std/vec/struct.Vec.html)
-- [HashMap<K, V>](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
+- [Primitives](https://doc.rust-lang.org/core/primitive/index.html) (no-op conversions)
+- [Option<T>](https://doc.rust-lang.org/core/option/enum.Option.html)
+
+Additional implementations are available by enabling the following features:
+
+- `alloc`
+  - [Cow<T>](https://doc.rust-lang.org/alloc/borrow/enum.Cow.html)
+  - [String](https://doc.rust-lang.org/alloc/string/struct.String.html)
+  - [Vec<T>](https://doc.rust-lang.org/alloc/vec/struct.Vec.html)
+  - [Box<T>](https://doc.rust-lang.org/alloc/boxed/struct.Box.html)
+- `std`
+  - [HashMap<K, V>](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
+
+Note that both `alloc` and `std` are enabled be default.
 
 ## Examples
 

@@ -1,10 +1,20 @@
+//! Defines traits for converting `&T` to an owned `T` such that `T: 'static`.
+//!
+//! TODO
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, rust_2018_idioms)]
 #![allow(clippy::missing_const_for_fn)]
 #![forbid(unsafe_code)]
 
-use std::borrow::Cow;
-use std::collections::HashMap;
-use std::hash::{BuildHasher, Hash};
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
+
+#[cfg(feature = "alloc")]
+use alloc::{
+    borrow::{Cow, ToOwned},
+    vec::Vec, boxed::Box, string::String
+};
 
 /// A trait for converting `&T` to an owned `T` such that `T: 'static`.
 ///
@@ -34,136 +44,6 @@ pub trait IntoBoundedStatic {
     fn into_static(self) -> Self::Static;
 }
 
-/// Blanket [`ToBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` to `Cow<'static, T: ?Sized>`.
-impl<T> ToBoundedStatic for Cow<'_, T>
-where
-    T: 'static + ToOwned + ?Sized,
-{
-    type Static = Cow<'static, T>;
-
-    fn to_static(&self) -> Self::Static {
-        Cow::Owned(self.clone().into_owned())
-    }
-}
-
-/// Blanket [`IntoBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` into `Cow<'static, T: ?Sized>`.
-impl<T> IntoBoundedStatic for Cow<'_, T>
-where
-    T: 'static + ToOwned + ?Sized,
-{
-    type Static = Cow<'static, T>;
-
-    fn into_static(self) -> Self::Static {
-        Cow::Owned(self.into_owned())
-    }
-}
-
-/// Blanket [`ToBoundedStatic`] impl for converting `Vec<T>` to `Vec<T>: 'static`.
-impl<T> ToBoundedStatic for Vec<T>
-where
-    T: ToBoundedStatic,
-{
-    type Static = Vec<T::Static>;
-
-    fn to_static(&self) -> Self::Static {
-        self.iter().map(ToBoundedStatic::to_static).collect()
-    }
-}
-
-/// Blanket [`IntoBoundedStatic`] impl for converting `Vec<T>` into `Vec<T>: 'static`.
-impl<T> IntoBoundedStatic for Vec<T>
-where
-    T: IntoBoundedStatic,
-{
-    type Static = Vec<T::Static>;
-
-    fn into_static(self) -> Self::Static {
-        self.into_iter()
-            .map(IntoBoundedStatic::into_static)
-            .collect()
-    }
-}
-
-/// Blanket [`ToBoundedStatic`] impl for converting `HashMap<K, V>` to `HashMap<K, V>: 'static`.
-impl<K, V, S: BuildHasher> ToBoundedStatic for HashMap<K, V, S>
-where
-    K: ToBoundedStatic,
-    K::Static: Eq + Hash,
-    V: ToBoundedStatic,
-{
-    type Static = HashMap<K::Static, V::Static>;
-
-    fn to_static(&self) -> Self::Static {
-        self.iter()
-            .map(|(k, v)| (k.to_static(), v.to_static()))
-            .collect()
-    }
-}
-
-/// Blanket [`IntoBoundedStatic`] impl for for converting `HashMap<K, V>` into `HashMap<K, V>: 'static`.
-impl<K, V, S: BuildHasher> IntoBoundedStatic for HashMap<K, V, S>
-where
-    K: IntoBoundedStatic,
-    K::Static: Eq + Hash,
-    V: IntoBoundedStatic,
-{
-    type Static = HashMap<K::Static, V::Static>;
-
-    fn into_static(self) -> Self::Static {
-        self.into_iter()
-            .map(|(k, v)| (k.into_static(), v.into_static()))
-            .collect()
-    }
-}
-
-/// Blanket [`ToBoundedStatic`] impl for converting `Option<T>` to `Option<T>: 'static`.
-impl<T> ToBoundedStatic for Option<T>
-where
-    T: ToBoundedStatic,
-{
-    type Static = Option<T::Static>;
-
-    fn to_static(&self) -> Self::Static {
-        self.as_ref().map(ToBoundedStatic::to_static)
-    }
-}
-
-/// Blanket [`IntoBoundedStatic`] impl for converting `Option<T>` into `Option<T>: 'static`.
-impl<T> IntoBoundedStatic for Option<T>
-where
-    T: IntoBoundedStatic,
-{
-    type Static = Option<T::Static>;
-
-    fn into_static(self) -> Self::Static {
-        self.map(IntoBoundedStatic::into_static)
-    }
-}
-
-/// Blanket [`ToBoundedStatic`] impl for converting `Box<T>` to `Box<T>: 'static`.
-impl<T> ToBoundedStatic for Box<T>
-where
-    T: ToBoundedStatic,
-{
-    type Static = Box<T::Static>;
-
-    fn to_static(&self) -> Self::Static {
-        Box::new(self.as_ref().to_static())
-    }
-}
-
-/// Blanket [`IntoBoundedStatic`] impl for converting `Box<T>` into `Box<T>: 'static`.
-impl<T> IntoBoundedStatic for Box<T>
-where
-    T: IntoBoundedStatic,
-{
-    type Static = Box<T::Static>;
-
-    fn into_static(self) -> Self::Static {
-        Box::new((*self).into_static())
-    }
-}
-
 /// No-op [`ToBoundedStatic`] impl for converting `&'static str` to `&'static str`.
 impl ToBoundedStatic for &'static str {
     type Static = &'static str;
@@ -176,24 +56,6 @@ impl ToBoundedStatic for &'static str {
 /// No-op [`IntoBoundedStatic`] impl for converting `&'static str` into `&'static str`.
 impl IntoBoundedStatic for &'static str {
     type Static = &'static str;
-
-    fn into_static(self) -> Self::Static {
-        self
-    }
-}
-
-/// [`ToBoundedStatic`] impl for `String`.
-impl ToBoundedStatic for String {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
-
-/// No-op [`IntoBoundedStatic`] impl for `String`.
-impl IntoBoundedStatic for String {
-    type Static = Self;
 
     fn into_static(self) -> Self::Static {
         self
@@ -234,11 +96,169 @@ make_primitive_impl!(i32);
 make_primitive_impl!(i64);
 make_primitive_impl!(i128);
 
+/// Blanket [`ToBoundedStatic`] impl for converting `Option<T>` to `Option<T>: 'static`.
+impl<T> ToBoundedStatic for Option<T>
+    where
+        T: ToBoundedStatic,
+{
+    type Static = Option<T::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        self.as_ref().map(ToBoundedStatic::to_static)
+    }
+}
+
+/// Blanket [`IntoBoundedStatic`] impl for converting `Option<T>` into `Option<T>: 'static`.
+impl<T> IntoBoundedStatic for Option<T>
+    where
+        T: IntoBoundedStatic,
+{
+    type Static = Option<T::Static>;
+
+    fn into_static(self) -> Self::Static {
+        self.map(IntoBoundedStatic::into_static)
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`ToBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` to `Cow<'static, T: ?Sized>`.
+impl<T> ToBoundedStatic for Cow<'_, T>
+where
+    T: 'static + ToOwned + ?Sized,
+{
+    type Static = Cow<'static, T>;
+
+    fn to_static(&self) -> Self::Static {
+        Cow::Owned(self.clone().into_owned())
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`IntoBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` into `Cow<'static, T: ?Sized>`.
+impl<T> IntoBoundedStatic for Cow<'_, T>
+where
+    T: 'static + ToOwned + ?Sized,
+{
+    type Static = Cow<'static, T>;
+
+    fn into_static(self) -> Self::Static {
+        Cow::Owned(self.into_owned())
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// [`ToBoundedStatic`] impl for `String`.
+impl ToBoundedStatic for String {
+    type Static = Self;
+
+    fn to_static(&self) -> Self::Static {
+        self.clone()
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// No-op [`IntoBoundedStatic`] impl for `String`.
+impl IntoBoundedStatic for String {
+    type Static = Self;
+
+    fn into_static(self) -> Self::Static {
+        self
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`ToBoundedStatic`] impl for converting `Vec<T>` to `Vec<T>: 'static`.
+impl<T> ToBoundedStatic for Vec<T>
+where
+    T: ToBoundedStatic,
+{
+    type Static = Vec<T::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        self.iter().map(ToBoundedStatic::to_static).collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`IntoBoundedStatic`] impl for converting `Vec<T>` into `Vec<T>: 'static`.
+impl<T> IntoBoundedStatic for Vec<T>
+where
+    T: IntoBoundedStatic,
+{
+    type Static = Vec<T::Static>;
+
+    fn into_static(self) -> Self::Static {
+        self.into_iter()
+            .map(IntoBoundedStatic::into_static)
+            .collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`ToBoundedStatic`] impl for converting `Box<T>` to `Box<T>: 'static`.
+impl<T> ToBoundedStatic for Box<T>
+    where
+        T: ToBoundedStatic,
+{
+    type Static = Box<T::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        Box::new(self.as_ref().to_static())
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`IntoBoundedStatic`] impl for converting `Box<T>` into `Box<T>: 'static`.
+impl<T> IntoBoundedStatic for Box<T>
+    where
+        T: IntoBoundedStatic,
+{
+    type Static = Box<T::Static>;
+
+    fn into_static(self) -> Self::Static {
+        Box::new((*self).into_static())
+    }
+}
+
+#[cfg(feature = "std")]
+/// Blanket [`ToBoundedStatic`] impl for converting `HashMap<K, V>` to `HashMap<K, V>: 'static`.
+impl<K, V, S: std::hash::BuildHasher> ToBoundedStatic for std::collections::HashMap<K, V, S>
+where
+    K: ToBoundedStatic,
+    K::Static: Eq + std::hash::Hash,
+    V: ToBoundedStatic,
+{
+    type Static = std::collections::HashMap<K::Static, V::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        self.iter()
+            .map(|(k, v)| (k.to_static(), v.to_static()))
+            .collect()
+    }
+}
+
+#[cfg(feature = "std")]
+/// Blanket [`IntoBoundedStatic`] impl for for converting `HashMap<K, V>` into `HashMap<K, V>: 'static`.
+impl<K, V, S: std::hash::BuildHasher> IntoBoundedStatic for std::collections::HashMap<K, V, S>
+where
+    K: IntoBoundedStatic,
+    K::Static: Eq + std::hash::Hash,
+    V: IntoBoundedStatic,
+{
+    type Static = std::collections::HashMap<K::Static, V::Static>;
+
+    fn into_static(self) -> Self::Static {
+        self.into_iter()
+            .map(|(k, v)| (k.into_static(), v.into_static()))
+            .collect()
+    }
+}
+
 #[cfg(test)]
-mod tests {
+mod core_tests {
     use super::*;
 
-    fn ensure_static<T: 'static>(_: T) {}
+    fn ensure_static<T: 'static>(t: T) {drop(t)}
 
     #[test]
     fn test_bool() {
@@ -311,6 +331,14 @@ mod tests {
         let to_static = s.to_static();
         ensure_static(to_static);
     }
+}
+
+#[cfg(feature = "alloc")]
+#[cfg(test)]
+mod alloc_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {drop(t)}
 
     #[test]
     fn test_string() {
@@ -354,7 +382,7 @@ mod tests {
     #[test]
     fn test_vec1() {
         let s = String::from("");
-        let value = vec![Cow::from(&s)];
+        let value = alloc::vec![Cow::from(&s)];
         let to_static = value.to_static();
         ensure_static(to_static);
     }
@@ -362,34 +390,7 @@ mod tests {
     #[test]
     fn test_vec2() {
         let s = String::from("");
-        let value = vec![Cow::from(&s), Cow::from(s.as_str())];
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_hashmap1() {
-        let k = String::from("key");
-        let v = String::from("value");
-        let value = HashMap::from([(Cow::from(&k), Cow::from(&v))]);
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_hashmap2() {
-        let k = "key";
-        let v = String::from("value");
-        let value = HashMap::from([(k, Cow::from(&v))]);
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_hashmap3() {
-        let k = String::from("key");
-        let v = 0i16;
-        let value = HashMap::from([(Cow::from(&k), v)]);
+        let value = alloc::vec![Cow::from(&s), Cow::from(s.as_str())];
         let to_static = value.to_static();
         ensure_static(to_static);
     }
@@ -428,7 +429,7 @@ mod tests {
     #[test]
     fn test_box_vec_cow() {
         let s = String::from("");
-        let value = Box::new(vec![Cow::from(&s)]);
+        let value = Box::new(alloc::vec![Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
@@ -436,7 +437,7 @@ mod tests {
     #[test]
     fn test_vec_box_cow() {
         let s = String::from("");
-        let value = vec![Box::new(Cow::from(&s))];
+        let value = alloc::vec![Box::new(Cow::from(&s))];
         let to_static = value.to_static();
         ensure_static(to_static);
     }
@@ -560,7 +561,7 @@ mod tests {
         let s = String::from("");
         let foo = Foo {
             bar: Cow::from(&s),
-            baz: vec![Cow::from(&s)],
+            baz: alloc::vec![Cow::from(&s)],
         };
         let to_static = foo.to_static();
         ensure_static(to_static);
@@ -594,6 +595,41 @@ mod tests {
             cow_str: Cow::from(&s),
         };
         let to_static = foo.to_static();
+        ensure_static(to_static);
+    }
+}
+
+#[cfg(feature = "std")]
+#[cfg(test)]
+mod std_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {drop(t)}
+
+    #[test]
+    fn test_hashmap1() {
+        let k = String::from("key");
+        let v = String::from("value");
+        let value = std::collections::HashMap::from([(Cow::from(&k), Cow::from(&v))]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_hashmap2() {
+        let k = "key";
+        let v = String::from("value");
+        let value = std::collections::HashMap::from([(k, Cow::from(&v))]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_hashmap3() {
+        let k = String::from("key");
+        let v = 0i16;
+        let value = std::collections::HashMap::from([(Cow::from(&k), v)]);
+        let to_static = value.to_static();
         ensure_static(to_static);
     }
 }
