@@ -220,6 +220,9 @@ macro_rules! make_primitive_impl {
     };
 }
 
+make_primitive_impl!(bool);
+make_primitive_impl!(f32);
+make_primitive_impl!(f64);
 make_primitive_impl!(u8);
 make_primitive_impl!(u16);
 make_primitive_impl!(u32);
@@ -236,6 +239,21 @@ mod tests {
     use super::*;
 
     fn ensure_static<T: 'static>(_: T) {}
+
+    #[test]
+    fn test_bool() {
+        ensure_static(false.to_static());
+    }
+
+    #[test]
+    fn test_f32() {
+        ensure_static(0.0f32.to_static());
+    }
+
+    #[test]
+    fn test_f64() {
+        ensure_static(0.0f64.to_static());
+    }
 
     #[test]
     fn test_u8() {

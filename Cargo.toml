@@ -2,7 +2,7 @@
 name = "bounded-static"
 version = "0.1.0"
 authors = ["FujiApple <fujiapple852@gmail.com>"]
-description = ""
+description = "defines the ToBoundedStatic and IntoBoundedStatic traits"
 repository = "https://github.com/fujiapple852/bounded_static"
 license = "Apache-2.0"
 edition = "2021"
