@@ -6,3 +6,12 @@ description = "defines the ToBoundedStatic and IntoBoundedStatic traits"
 repository = "https://github.com/fujiapple852/bounded_static"
 license = "Apache-2.0"
 edition = "2021"
+
+[features]
+default = [ "alloc", "std" ]
+
+# Enable impls of [To|Into]BoundedStatic for types from alloc.
+alloc = []
+
+# Enable impls of [To|Into]BoundedStatic for types from std.
+std = [ "alloc" ]
