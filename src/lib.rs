@@ -13,6 +13,7 @@ extern crate alloc;
 use alloc::{
     borrow::{Cow, ToOwned},
     boxed::Box,
+    collections::BinaryHeap,
     string::String,
     vec::Vec,
 };
@@ -190,6 +191,36 @@ where
     T: IntoBoundedStatic,
 {
     type Static = Vec<T::Static>;
+
+    fn into_static(self) -> Self::Static {
+        self.into_iter()
+            .map(IntoBoundedStatic::into_static)
+            .collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`ToBoundedStatic`] impl for converting `BinaryHeap<T>` into `BinaryHeap<T>: 'static`.
+impl<T> ToBoundedStatic for BinaryHeap<T>
+where
+    T: ToBoundedStatic,
+    T::Static: Ord,
+{
+    type Static = BinaryHeap<T::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        self.iter().map(ToBoundedStatic::to_static).collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`IntoBoundedStatic`] impl for converting `BinaryHeap<T>` into `BinaryHeap<T>: 'static`.
+impl<T> IntoBoundedStatic for BinaryHeap<T>
+where
+    T: IntoBoundedStatic,
+    T::Static: Ord,
+{
+    type Static = BinaryHeap<T::Static>;
 
     fn into_static(self) -> Self::Static {
         self.into_iter()
@@ -414,6 +445,14 @@ mod alloc_tests {
     fn test_vec2() {
         let s = String::from("");
         let value = alloc::vec![Cow::from(&s), Cow::from(s.as_str())];
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_binary_heap() {
+        let s = String::from("");
+        let value = BinaryHeap::from([Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
