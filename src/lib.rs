@@ -4,7 +4,6 @@
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, rust_2018_idioms)]
 #![allow(clippy::missing_const_for_fn)]
 #![forbid(unsafe_code)]
-
 #![cfg_attr(not(feature = "std"), no_std)]
 
 #[cfg(feature = "alloc")]
@@ -13,7 +12,9 @@ extern crate alloc;
 #[cfg(feature = "alloc")]
 use alloc::{
     borrow::{Cow, ToOwned},
-    vec::Vec, boxed::Box, string::String
+    boxed::Box,
+    string::String,
+    vec::Vec,
 };
 
 /// A trait for converting `&T` to an owned `T` such that `T: 'static`.
@@ -101,8 +102,8 @@ make_primitive_impl!(i128);
 
 /// Blanket [`ToBoundedStatic`] impl for converting `Option<T>` to `Option<T>: 'static`.
 impl<T> ToBoundedStatic for Option<T>
-    where
-        T: ToBoundedStatic,
+where
+    T: ToBoundedStatic,
 {
     type Static = Option<T::Static>;
 
@@ -113,8 +114,8 @@ impl<T> ToBoundedStatic for Option<T>
 
 /// Blanket [`IntoBoundedStatic`] impl for converting `Option<T>` into `Option<T>: 'static`.
 impl<T> IntoBoundedStatic for Option<T>
-    where
-        T: IntoBoundedStatic,
+where
+    T: IntoBoundedStatic,
 {
     type Static = Option<T::Static>;
 
@@ -200,8 +201,8 @@ where
 #[cfg(feature = "alloc")]
 /// Blanket [`ToBoundedStatic`] impl for converting `Box<T>` to `Box<T>: 'static`.
 impl<T> ToBoundedStatic for Box<T>
-    where
-        T: ToBoundedStatic,
+where
+    T: ToBoundedStatic,
 {
     type Static = Box<T::Static>;
 
@@ -213,8 +214,8 @@ impl<T> ToBoundedStatic for Box<T>
 #[cfg(feature = "alloc")]
 /// Blanket [`IntoBoundedStatic`] impl for converting `Box<T>` into `Box<T>: 'static`.
 impl<T> IntoBoundedStatic for Box<T>
-    where
-        T: IntoBoundedStatic,
+where
+    T: IntoBoundedStatic,
 {
     type Static = Box<T::Static>;
 
@@ -261,7 +262,9 @@ where
 mod core_tests {
     use super::*;
 
-    fn ensure_static<T: 'static>(t: T) {drop(t)}
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t)
+    }
 
     #[test]
     fn test_bool() {
@@ -356,7 +359,9 @@ mod core_tests {
 mod alloc_tests {
     use super::*;
 
-    fn ensure_static<T: 'static>(t: T) {drop(t)}
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t)
+    }
 
     #[test]
     fn test_string() {
@@ -622,7 +627,9 @@ mod alloc_tests {
 mod std_tests {
     use super::*;
 
-    fn ensure_static<T: 'static>(t: T) {drop(t)}
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t)
+    }
 
     #[test]
     fn test_hashmap1() {
