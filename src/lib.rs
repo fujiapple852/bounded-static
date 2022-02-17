@@ -263,7 +263,7 @@ mod core_tests {
     use super::*;
 
     fn ensure_static<T: 'static>(t: T) {
-        drop(t)
+        drop(t);
     }
 
     #[test]
@@ -360,7 +360,7 @@ mod alloc_tests {
     use super::*;
 
     fn ensure_static<T: 'static>(t: T) {
-        drop(t)
+        drop(t);
     }
 
     #[test]
@@ -628,7 +628,7 @@ mod std_tests {
     use super::*;
 
     fn ensure_static<T: 'static>(t: T) {
-        drop(t)
+        drop(t);
     }
 
     #[test]
