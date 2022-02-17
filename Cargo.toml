@@ -8,10 +8,13 @@ license = "Apache-2.0"
 edition = "2021"
 
 [features]
-default = [ "alloc", "std" ]
+default = [ "collections", "alloc", "std" ]
 
-# Enable impls of [To|Into]BoundedStatic for types from alloc.
+# Enable impls of [To|Into]BoundedStatic for common types in the alloc crate.
 alloc = []
 
-# Enable impls of [To|Into]BoundedStatic for types from std.
+# Enable impls of [To|Into]BoundedStatic for collections in the alloc crate.
+collections = [ "alloc" ]
+
+# Enable impls of [To|Into]BoundedStatic for other types in std.
 std = [ "alloc" ]

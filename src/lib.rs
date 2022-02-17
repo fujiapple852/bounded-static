@@ -13,10 +13,12 @@ extern crate alloc;
 use alloc::{
     borrow::{Cow, ToOwned},
     boxed::Box,
-    collections::{BTreeMap, BTreeSet, BinaryHeap, LinkedList, VecDeque},
     string::String,
     vec::Vec,
 };
+
+#[cfg(feature = "collections")]
+use alloc::collections::{BTreeMap, BTreeSet, BinaryHeap, LinkedList, VecDeque};
 
 /// A trait for converting `&T` to an owned `T` such that `T: 'static`.
 ///
@@ -199,7 +201,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`ToBoundedStatic`] impl for converting `BinaryHeap<T>` into `BinaryHeap<T>: 'static`.
 impl<T> ToBoundedStatic for BinaryHeap<T>
 where
@@ -213,7 +215,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`IntoBoundedStatic`] impl for converting `BinaryHeap<T>` into `BinaryHeap<T>: 'static`.
 impl<T> IntoBoundedStatic for BinaryHeap<T>
 where
@@ -229,7 +231,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`ToBoundedStatic`] impl for converting `BTreeMap<K, V>` into `BTreeMap<K, V>: 'static`.
 impl<K, V> ToBoundedStatic for BTreeMap<K, V>
 where
@@ -246,7 +248,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`IntoBoundedStatic`] impl for converting `BTreeMap<K, V>` into `BTreeMap<K, V>: 'static`.
 impl<K, V> IntoBoundedStatic for BTreeMap<K, V>
 where
@@ -263,7 +265,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`ToBoundedStatic`] impl for converting `BTreeSet<T>` into `BTreeSet<T>: 'static`.
 impl<T> ToBoundedStatic for BTreeSet<T>
 where
@@ -277,7 +279,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`IntoBoundedStatic`] impl for converting `BTreeSet<T>` into `BTreeSet<T>: 'static`.
 impl<T> IntoBoundedStatic for BTreeSet<T>
 where
@@ -293,7 +295,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`ToBoundedStatic`] impl for converting `LinkedList<T>` into `LinkedList<T>: 'static`.
 impl<T> ToBoundedStatic for LinkedList<T>
 where
@@ -306,7 +308,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`IntoBoundedStatic`] impl for converting `LinkedList<T>` into `LinkedList<T>: 'static`.
 impl<T> IntoBoundedStatic for LinkedList<T>
 where
@@ -321,7 +323,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`ToBoundedStatic`] impl for converting `VecDeque<T>` into `VecDeque<T>: 'static`.
 impl<T> ToBoundedStatic for VecDeque<T>
 where
@@ -334,7 +336,7 @@ where
     }
 }
 
-#[cfg(feature = "alloc")]
+#[cfg(feature = "collections")]
 /// Blanket [`IntoBoundedStatic`] impl for converting `VecDeque<T>` into `VecDeque<T>: 'static`.
 impl<T> IntoBoundedStatic for VecDeque<T>
 where
@@ -570,47 +572,6 @@ mod alloc_tests {
     }
 
     #[test]
-    fn test_binary_heap() {
-        let s = String::from("");
-        let value = BinaryHeap::from([Cow::from(&s)]);
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_btree_map() {
-        let k = String::from("key");
-        let v = String::from("value");
-        let value = BTreeMap::from([(Cow::from(&k), Cow::from(&v))]);
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_btree_set() {
-        let s = String::from("");
-        let value = BTreeSet::from([Cow::from(&s)]);
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_linked_list() {
-        let s = String::from("");
-        let value = LinkedList::from([Cow::from(&s)]);
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_vec_deque() {
-        let s = String::from("");
-        let value = VecDeque::from([Cow::from(&s)]);
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
     fn test_option_none() {
         let value: Option<Cow<'_, str>> = None;
         let to_static = value.to_static();
@@ -810,6 +771,57 @@ mod alloc_tests {
             cow_str: Cow::from(&s),
         };
         let to_static = foo.to_static();
+        ensure_static(to_static);
+    }
+}
+
+#[cfg(feature = "collections")]
+#[cfg(test)]
+mod collections_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t);
+    }
+
+    #[test]
+    fn test_binary_heap() {
+        let s = String::from("");
+        let value = BinaryHeap::from([Cow::from(&s)]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_btree_map() {
+        let k = String::from("key");
+        let v = String::from("value");
+        let value = BTreeMap::from([(Cow::from(&k), Cow::from(&v))]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_btree_set() {
+        let s = String::from("");
+        let value = BTreeSet::from([Cow::from(&s)]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_linked_list() {
+        let s = String::from("");
+        let value = LinkedList::from([Cow::from(&s)]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_vec_deque() {
+        let s = String::from("");
+        let value = VecDeque::from([Cow::from(&s)]);
+        let to_static = value.to_static();
         ensure_static(to_static);
     }
 }
