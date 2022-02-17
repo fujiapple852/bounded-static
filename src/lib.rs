@@ -83,13 +83,16 @@ macro_rules! make_primitive_impl {
 }
 
 make_primitive_impl!(bool);
+make_primitive_impl!(char);
 make_primitive_impl!(f32);
 make_primitive_impl!(f64);
+make_primitive_impl!(usize);
 make_primitive_impl!(u8);
 make_primitive_impl!(u16);
 make_primitive_impl!(u32);
 make_primitive_impl!(u64);
 make_primitive_impl!(u128);
+make_primitive_impl!(isize);
 make_primitive_impl!(i8);
 make_primitive_impl!(i16);
 make_primitive_impl!(i32);
@@ -266,6 +269,11 @@ mod core_tests {
     }
 
     #[test]
+    fn test_char() {
+        ensure_static('a'.to_static());
+    }
+
+    #[test]
     fn test_f32() {
         ensure_static(0.0f32.to_static());
     }
@@ -273,6 +281,11 @@ mod core_tests {
     #[test]
     fn test_f64() {
         ensure_static(0.0f64.to_static());
+    }
+
+    #[test]
+    fn test_usize() {
+        ensure_static(0usize.to_static());
     }
 
     #[test]
@@ -298,6 +311,11 @@ mod core_tests {
     #[test]
     fn test_u128() {
         ensure_static(0u128.to_static());
+    }
+
+    #[test]
+    fn test_isize() {
+        ensure_static(0isize.to_static());
     }
 
     #[test]
