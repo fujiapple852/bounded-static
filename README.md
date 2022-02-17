@@ -1,3 +1,5 @@
+![ci](https://github.com/fujiapple852/bounded_static/actions/workflows/ci.yml/badge.svg)
+
 # Bounded Static
 
 An experimental crate that defines the `ToBoundedStatic` and `IntoBoundedStatic` traits and provides impls for common
