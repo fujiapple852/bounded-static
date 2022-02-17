@@ -36,19 +36,25 @@ Experimental
 Implementations of `ToBoundedStatic` and `IntoBoundedStatic` are provided for the following `core` types:
 
 - [Primitives](https://doc.rust-lang.org/core/primitive/index.html) (no-op conversions)
-- [Option<T>](https://doc.rust-lang.org/core/option/enum.Option.html)
+- [Option](https://doc.rust-lang.org/core/option/enum.Option.html)
 
 Additional implementations are available by enabling the following features:
 
-- `alloc`
-  - [Cow<T>](https://doc.rust-lang.org/alloc/borrow/enum.Cow.html)
+- `alloc` for common types from the `alloc` crate:
+  - [Cow](https://doc.rust-lang.org/alloc/borrow/enum.Cow.html)
   - [String](https://doc.rust-lang.org/alloc/string/struct.String.html)
-  - [Vec<T>](https://doc.rust-lang.org/alloc/vec/struct.Vec.html)
-  - [Box<T>](https://doc.rust-lang.org/alloc/boxed/struct.Box.html)
-- `std`
-  - [HashMap<K, V>](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
+  - [Vec](https://doc.rust-lang.org/alloc/vec/struct.Vec.html)
+  - [Box](https://doc.rust-lang.org/alloc/boxed/struct.Box.html)
+- `collections` for all collection types in the `alloc` crate:
+  - [BinaryHeap](https://doc.rust-lang.org/alloc/collections/binary_heap/struct.BinaryHeap.html)
+  - [BTreeMap](https://doc.rust-lang.org/alloc/collections/btree_map/struct.BTreeMap.html)
+  - [BTreeSet](https://doc.rust-lang.org/alloc/collections/btree_set/struct.BTreeSet.html)
+  - [LinkedList](https://doc.rust-lang.org/alloc/collections/linked_list/struct.LinkedList.html)
+  - [VecDeque](https://doc.rust-lang.org/alloc/collections/vec_deque/struct.VecDeque.html)
+- `std` for additional types from `std`:
+  - [HashMap](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
 
-Note that both `alloc` and `std` are enabled be default.
+Note that `collections`, `alloc` and `std` are enabled be default.
 
 ## Examples
 
