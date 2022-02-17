@@ -13,7 +13,7 @@ extern crate alloc;
 use alloc::{
     borrow::{Cow, ToOwned},
     boxed::Box,
-    collections::{BTreeMap, BTreeSet, BinaryHeap, LinkedList},
+    collections::{BTreeMap, BTreeSet, BinaryHeap, LinkedList, VecDeque},
     string::String,
     vec::Vec,
 };
@@ -322,6 +322,34 @@ where
 }
 
 #[cfg(feature = "alloc")]
+/// Blanket [`ToBoundedStatic`] impl for converting `VecDeque<T>` into `VecDeque<T>: 'static`.
+impl<T> ToBoundedStatic for VecDeque<T>
+where
+    T: ToBoundedStatic,
+{
+    type Static = VecDeque<T::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        self.iter().map(ToBoundedStatic::to_static).collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`IntoBoundedStatic`] impl for converting `VecDeque<T>` into `VecDeque<T>: 'static`.
+impl<T> IntoBoundedStatic for VecDeque<T>
+where
+    T: IntoBoundedStatic,
+{
+    type Static = VecDeque<T::Static>;
+
+    fn into_static(self) -> Self::Static {
+        self.into_iter()
+            .map(IntoBoundedStatic::into_static)
+            .collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
 /// Blanket [`ToBoundedStatic`] impl for converting `Box<T>` to `Box<T>: 'static`.
 impl<T> ToBoundedStatic for Box<T>
 where
@@ -570,6 +598,14 @@ mod alloc_tests {
     fn test_linked_list() {
         let s = String::from("");
         let value = LinkedList::from([Cow::from(&s)]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_vec_deque() {
+        let s = String::from("");
+        let value = VecDeque::from([Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
