@@ -13,7 +13,7 @@ extern crate alloc;
 use alloc::{
     borrow::{Cow, ToOwned},
     boxed::Box,
-    collections::{BTreeMap, BinaryHeap},
+    collections::{BTreeMap, BTreeSet, BinaryHeap},
     string::String,
     vec::Vec,
 };
@@ -264,6 +264,36 @@ where
 }
 
 #[cfg(feature = "alloc")]
+/// Blanket [`ToBoundedStatic`] impl for converting `BTreeSet<T>` into `BTreeSet<T>: 'static`.
+impl<T> ToBoundedStatic for BTreeSet<T>
+where
+    T: ToBoundedStatic,
+    T::Static: Ord,
+{
+    type Static = BTreeSet<T::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        self.iter().map(ToBoundedStatic::to_static).collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
+/// Blanket [`IntoBoundedStatic`] impl for converting `BTreeSet<T>` into `BTreeSet<T>: 'static`.
+impl<T> IntoBoundedStatic for BTreeSet<T>
+where
+    T: IntoBoundedStatic,
+    T::Static: Ord,
+{
+    type Static = BTreeSet<T::Static>;
+
+    fn into_static(self) -> Self::Static {
+        self.into_iter()
+            .map(IntoBoundedStatic::into_static)
+            .collect()
+    }
+}
+
+#[cfg(feature = "alloc")]
 /// Blanket [`ToBoundedStatic`] impl for converting `Box<T>` to `Box<T>: 'static`.
 impl<T> ToBoundedStatic for Box<T>
 where
@@ -496,6 +526,14 @@ mod alloc_tests {
         let k = String::from("key");
         let v = String::from("value");
         let value = BTreeMap::from([(Cow::from(&k), Cow::from(&v))]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_btree_set() {
+        let s = String::from("");
+        let value = BTreeSet::from([Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
