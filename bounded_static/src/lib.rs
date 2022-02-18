@@ -1,6 +1,143 @@
-//! Defines traits for converting `&T` to an owned `T` such that `T: 'static`.
+#![doc(html_root_url = "https://docs.rs/bounded-static/0.1.0")]
+//! Provides the [`ToBoundedStatic`] and [`IntoBoundedStatic`] traits and [ToStatic] derive macro.
 //!
-//! TODO
+//! As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
+//!
+//! > `T: 'static` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
+//!
+//! The traits [`ToBoundedStatic`] and [`IntoBoundedStatic`] can be used to convert any suitable `T` and `&T` to an
+//! owned `T` such that `T: 'static`.  Both traits define an associated type which is bounded by `'static` and provide
+//! a method to convert to that bounded type:
+//!
+//! ```rust
+//! pub trait ToBoundedStatic {
+//!     type Static: 'static;
+//!
+//!     fn to_static(&self) -> Self::Static;
+//! }
+//!
+//! pub trait IntoBoundedStatic {
+//!     type Static: 'static;
+//!
+//!     fn into_static(self) -> Self::Static;
+//! }
+//! ```
+//!
+//! Implementations of `ToBoundedStatic` and `IntoBoundedStatic` are provided for the following `core` types:
+//!
+//! - [Primitives](https://doc.rust-lang.org/core/primitive/index.html) (no-op conversions)
+//! - [Option](https://doc.rust-lang.org/core/option/enum.Option.html)
+//!
+//! Additional implementations are available by enabling the following features:
+//!
+//! - `alloc` for common types from the `alloc` crate:
+//!   - [Cow](https://doc.rust-lang.org/alloc/borrow/enum.Cow.html)
+//!   - [String](https://doc.rust-lang.org/alloc/string/struct.String.html)
+//!   - [Vec](https://doc.rust-lang.org/alloc/vec/struct.Vec.html)
+//!   - [Box](https://doc.rust-lang.org/alloc/boxed/struct.Box.html)
+//!
+//! - `collections` for all collection types in the `alloc` crate:
+//!   - [BinaryHeap](https://doc.rust-lang.org/alloc/collections/binary_heap/struct.BinaryHeap.html)
+//!   - [BTreeMap](https://doc.rust-lang.org/alloc/collections/btree_map/struct.BTreeMap.html)
+//!   - [BTreeSet](https://doc.rust-lang.org/alloc/collections/btree_set/struct.BTreeSet.html)
+//!   - [LinkedList](https://doc.rust-lang.org/alloc/collections/linked_list/struct.LinkedList.html)
+//!   - [VecDeque](https://doc.rust-lang.org/alloc/collections/vec_deque/struct.VecDeque.html)
+//!
+//! - `std` for additional types from `std`:
+//!   - [HashMap](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
+//!   - [HashSet](https://doc.rust-lang.org/std/collections/struct.HashSet.html)
+//!
+//! Note that `collections`, `alloc` and `std` are enabled be default.
+//!
+//! # Examples
+//!
+//! Given a structure which can be borrow or owned and a function which requires its argument is bounded by the
+//! `'static` lifetime:
+//!
+//! ```rust
+//! # use std::borrow::Cow;
+//! struct Foo<'a> {
+//!     bar: Cow<'a, str>,
+//!     baz: Vec<Cow<'a, str>>,
+//! }
+//!
+//! fn ensure_static<T: 'static>(_: T) {}
+//! ```
+//!
+//! We can implement `ToBoundedStatic` (and `IntoBoundedStatic`) for `Foo<'_>`:
+//!
+//! ```rust
+//! # use std::borrow::Cow;
+//! # use bounded_static::ToBoundedStatic;
+//! struct Foo<'a> {
+//!     bar: Cow<'a, str>,
+//!     baz: Vec<Cow<'a, str>>,
+//! }
+//! impl ToBoundedStatic for Foo<'_> {
+//!     type Static = Foo<'static>;
+//!
+//!     fn to_static(&self) -> Self::Static {
+//!         Foo { bar: self.bar.to_static(), baz: self.baz.to_static() }
+//!     }
+//! }
+//! ```
+//!
+//! This allows is to convert to an owned representation such that it is now bounded by `'static`:
+//!
+//! ```rust
+//! #[test]
+//! fn test() {
+//!     # fn ensure_static<T: 'static>(_: T) {}
+//!     let s = String::from("data");
+//!     let foo = Foo { bar: Cow::from(&s), baz: vec![Cow::from(&s)] };
+//!     let to_static = foo.to_static();
+//!     ensure_static(to_static);
+//! }
+//! ```
+//!
+//! # Derive
+//!
+//! These traits may be automatically derived for any `struct` or `enum` that can be converted to a form that is
+//! bounded by `'static` by using the [`ToStatic`] macro.
+//!
+//! It support all `struct` flavors (unit, named & unnamed), all `enum` variant flavors (unit, named & unnamed).  It
+//! does not currently support `union`.
+//!
+//! To use the [`ToStatic`] macro you must enable the `derive` feature:
+//!
+//! ```yaml
+//! bounded-static = { version = "0.1.0", features = [ "derive" ] }
+//! ```
+//!
+//! # Examples
+//!
+//! ```rust
+//! # use std::borrow::Cow;
+//! # use std::collections::HashMap;
+//! # use bounded_static::ToStatic;
+//! /// Named field struct
+//! #[derive(ToStatic)]
+//! struct Foo<'a> {
+//!     aaa: Cow<'a, str>,
+//!     bbb: &'static str,
+//!     ccc: Baz<'a>,
+//! }
+//!
+//! /// Unnamed field struct
+//! #[derive(ToStatic)]
+//! struct Bar<'a, 'b>(u128, HashMap<Cow<'a, str>, Cow<'b, str>>);
+//!
+//! /// Unit struct
+//! #[derive(ToStatic)]
+//! struct Qux;
+//!
+//! #[derive(ToStatic)]
+//! enum Baz<'a> {
+//!     First(String, usize, Vec<Cow<'a, str>>),
+//!     Second { fst: u32, snd: &'static str },
+//!     Third,
+//! }
+//! ```
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, rust_2018_idioms)]
 #![allow(clippy::missing_const_for_fn)]
 #![forbid(unsafe_code)]
@@ -26,9 +163,7 @@ pub use bounded_static_derive::ToStatic;
 
 /// A trait for converting `&T` to an owned `T` such that `T: 'static`.
 ///
-/// As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
-///
-/// > `T: 'static` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
+/// See the module level documentation for details.
 pub trait ToBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
@@ -40,9 +175,7 @@ pub trait ToBoundedStatic {
 
 /// A trait for converting an owned `T` into an owned `T` such that `T: 'static`.
 ///
-/// As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
-///
-/// > `T: 'static` should be read as "`T` is bounded by a `'static` lifetime" not "`T` has a `'static` lifetime".
+/// See the module level documentation for details.
 pub trait IntoBoundedStatic {
     /// The target type is bounded by the `'static` lifetime.
     type Static: 'static;
