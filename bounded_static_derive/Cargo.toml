@@ -20,4 +20,4 @@ quote = "1.0.15"
 proc-macro2 = "1.0.36"
 
 [dev-dependencies]
-bounded-static = { version = "0.1.0", path = "..", features = [ "derive" ] }
+bounded-static = { version = "0.1.0", path = "../bounded_static", features = [ "derive" ] }

@@ -1,0 +1,33 @@
+[package]
+name = "bounded-static"
+version = "0.1.0"
+rust-version = "1.58.1"
+edition = "2021"
+authors = ["FujiApple <fujiapple852@gmail.com>"]
+description = "Defines the ToBoundedStatic and IntoBoundedStatic traits"
+readme = "../README.md"
+repository = "https://github.com/fujiapple852/bounded_static"
+license = "Apache-2.0"
+keywords = ["cow", "static", "bounded", "owned", "derive"]
+categories = ["no-std", "rust-patterns", "data-structures", "memory-management"]
+
+[features]
+default = [ "collections", "alloc", "std" ]
+
+# Enable impls of [To|Into]BoundedStatic for common types in the alloc crate.
+alloc = []
+
+# Enable impls of [To|Into]BoundedStatic for collections in the alloc crate.
+collections = [ "alloc" ]
+
+# Enable impls of [To|Into]BoundedStatic for other types in std.
+std = [ "alloc" ]
+
+# Enable the ToStatic custom derive macro.
+derive = [ "bounded-static-derive" ]
+
+[dependencies]
+bounded-static-derive = { version = "0.1.0", path = "../bounded_static_derive", optional = true }
+
+[package.metadata.docs.rs]
+all-features = true
