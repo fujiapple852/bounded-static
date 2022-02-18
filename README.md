@@ -53,7 +53,8 @@ Additional implementations are available by enabling the following features:
   - [VecDeque](https://doc.rust-lang.org/alloc/collections/vec_deque/struct.VecDeque.html)
 - `std` for additional types from `std`:
   - [HashMap](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
-
+  - [HashSet](https://doc.rust-lang.org/std/collections/struct.HashSet.html)
+  
 Note that `collections`, `alloc` and `std` are enabled be default.
 
 ## Examples

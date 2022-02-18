@@ -415,6 +415,36 @@ where
     }
 }
 
+#[cfg(feature = "std")]
+/// Blanket [`ToBoundedStatic`] impl for converting `HashSet<T>` into `HashSet<T>: 'static`.
+impl<T, S: std::hash::BuildHasher> ToBoundedStatic for std::collections::HashSet<T, S>
+where
+    T: ToBoundedStatic,
+    T::Static: Eq + std::hash::Hash,
+{
+    type Static = std::collections::HashSet<T::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        self.iter().map(ToBoundedStatic::to_static).collect()
+    }
+}
+
+#[cfg(feature = "std")]
+/// Blanket [`IntoBoundedStatic`] impl for converting `HashSet<T>` into `HashSet<T>: 'static`.
+impl<T, S: std::hash::BuildHasher> IntoBoundedStatic for std::collections::HashSet<T, S>
+where
+    T: IntoBoundedStatic,
+    T::Static: Eq + std::hash::Hash,
+{
+    type Static = std::collections::HashSet<T::Static>;
+
+    fn into_static(self) -> Self::Static {
+        self.into_iter()
+            .map(IntoBoundedStatic::into_static)
+            .collect()
+    }
+}
+
 #[cfg(test)]
 mod core_tests {
     use super::*;
@@ -862,6 +892,14 @@ mod std_tests {
         let k = String::from("key");
         let v = 0i16;
         let value = std::collections::HashMap::from([(Cow::from(&k), v)]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_hashset() {
+        let value = String::from("data");
+        let value = std::collections::HashSet::from([(Cow::from(&value))]);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
