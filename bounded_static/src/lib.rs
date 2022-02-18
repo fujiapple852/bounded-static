@@ -23,7 +23,7 @@
 //! }
 //! ```
 //!
-//! Implementations of `ToBoundedStatic` and `IntoBoundedStatic` are provided for the following `core` types:
+//! Implementations of [`ToBoundedStatic`] and [`IntoBoundedStatic`] are provided for the following `core` types:
 //!
 //! - [Primitives](https://doc.rust-lang.org/core/primitive/index.html) (no-op conversions)
 //! - [Option](https://doc.rust-lang.org/core/option/enum.Option.html)
@@ -64,7 +64,7 @@
 //! fn ensure_static<T: 'static>(_: T) {}
 //! ```
 //!
-//! We can implement `ToBoundedStatic` (and `IntoBoundedStatic`) for `Foo<'_>`:
+//! We can implement [`ToBoundedStatic`] (and [`IntoBoundedStatic`]) for `Foo<'_>`:
 //!
 //! ```rust
 //! # use std::borrow::Cow;
@@ -98,10 +98,8 @@
 //! # Derive
 //!
 //! These traits may be automatically derived for any `struct` or `enum` that can be converted to a form that is
-//! bounded by `'static` by using the [`ToStatic`] macro.
-//!
-//! It support all `struct` flavors (unit, named & unnamed), all `enum` variant flavors (unit, named & unnamed).  It
-//! does not currently support `union`.
+//! bounded by `'static` by using the [`ToStatic`] macro. It support all `struct` flavors (unit, named & unnamed),
+//! all `enum` variant flavors (unit, named & unnamed).  It does not currently support `union`.
 //!
 //! To use the [`ToStatic`] macro you must enable the `derive` feature:
 //!
