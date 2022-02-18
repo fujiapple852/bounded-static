@@ -1,6 +1,6 @@
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use syn::{Field, GenericParam, Generics, Ident, Lifetime, Type, TypeParam};
+use syn::{ConstParam, Field, GenericParam, Generics, Ident, Lifetime, Type, TypeParam};
 
 /// The method and trait bound for both traits we will generate.
 #[derive(Copy, Clone)]
@@ -84,7 +84,7 @@ pub(super) fn make_target_generics(generics: &Generics) -> Vec<TokenStream> {
         .map(|param| match param {
             GenericParam::Type(TypeParam { ident, .. }) => quote!(#ident::Static),
             GenericParam::Lifetime(_) => quote!('static),
-            GenericParam::Const(_) => unimplemented!(),
+            GenericParam::Const(ConstParam { ident, .. }) => quote!(#ident),
         })
         .collect()
 }
@@ -97,9 +97,9 @@ pub(super) fn make_unbounded_generics(generics: &Generics) -> Vec<TokenStream> {
         .params
         .iter()
         .map(|param| match param {
-            GenericParam::Type(TypeParam { ident, .. }) => quote!(#ident),
+            GenericParam::Type(TypeParam { ident, .. })
+            | GenericParam::Const(ConstParam { ident, .. }) => quote!(#ident),
             GenericParam::Lifetime(_) => quote!('_),
-            GenericParam::Const(_) => unimplemented!(),
         })
         .collect()
 }
@@ -114,7 +114,8 @@ pub(super) fn make_bounded_generics(generics: &Generics, target: TargetTrait) ->
         .iter()
         .filter_map(|param| match param {
             GenericParam::Type(TypeParam { ident, .. }) => Some(quote!(#ident: #bound)),
-            _ => None,
+            GenericParam::Const(c) => Some(quote!(#c)),
+            GenericParam::Lifetime(_) => None,
         })
         .collect()
 }

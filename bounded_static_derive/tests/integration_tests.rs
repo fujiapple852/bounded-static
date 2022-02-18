@@ -233,6 +233,42 @@ fn test_enum_into() {
     ensure_static(third.into_static());
 }
 
+#[test]
+fn test_const_generics_struct() {
+    #[derive(ToStatic)]
+    struct Foo<'a, const N: usize, const M: usize> {
+        value: Cow<'a, str>,
+        left: [usize; N],
+        right: [usize; M],
+    }
+    let value = String::from("value");
+    let data = Foo {
+        value: Cow::from(&value),
+        left: [0],
+        right: [0, 1, 2],
+    };
+    let owned = data.to_static();
+    ensure_static(owned);
+}
+
+#[test]
+fn test_const_generics_struct_into() {
+    #[derive(ToStatic)]
+    struct Foo<'a, const N: usize, const M: usize, const Q: bool> {
+        value: Cow<'a, str>,
+        left: [usize; N],
+        right: [usize; M],
+    }
+    let value = String::from("value");
+    let data = Foo::<'_, 1, 3, true> {
+        value: Cow::from(&value),
+        left: [0],
+        right: [0, 1, 2],
+    };
+    let owned = data.into_static();
+    ensure_static(owned);
+}
+
 fn ensure_static<S: 'static>(s: S) {
     drop(s);
 }
