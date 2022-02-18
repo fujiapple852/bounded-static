@@ -131,6 +131,31 @@ where
     }
 }
 
+/// Blanket [`ToBoundedStatic`] impl for converting `[T; const N: usize]` into `[T; const N: usize]: 'static`.
+impl<T, const N: usize> ToBoundedStatic for [T; N]
+where
+    T: ToBoundedStatic + Copy,
+{
+    type Static = [T::Static; N];
+
+    fn to_static(&self) -> Self::Static {
+        // Note that we required that `T` is `Copy` here whereas the `IntoBoundedStatic` impl does does not.
+        self.map(|item| item.to_static())
+    }
+}
+
+/// Blanket [`IntoBoundedStatic`] impl for converting `[T; const N: usize]` into `[T; const N: usize]: 'static`.
+impl<T, const N: usize> IntoBoundedStatic for [T; N]
+where
+    T: IntoBoundedStatic,
+{
+    type Static = [T::Static; N];
+
+    fn into_static(self) -> Self::Static {
+        self.map(IntoBoundedStatic::into_static)
+    }
+}
+
 #[cfg(feature = "alloc")]
 /// Blanket [`ToBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` to `Cow<'static, T: ?Sized>`.
 impl<T> ToBoundedStatic for Cow<'_, T>
@@ -538,6 +563,19 @@ mod core_tests {
         let s = "";
         let to_static = s.to_static();
         ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_array() {
+        let arr = ["test"];
+        ensure_static(arr.to_static());
+    }
+
+    #[test]
+    fn test_array_into() {
+        let s = String::from("");
+        let arr = [Cow::from(&s)];
+        ensure_static(arr.into_static());
     }
 }
 
