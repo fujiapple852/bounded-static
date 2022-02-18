@@ -1,5 +1,5 @@
+use crate::common;
 use crate::common::TargetTrait;
-use crate::{common, generics};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 use syn::{Fields, FieldsNamed, FieldsUnnamed, Generics, Variant};
@@ -15,12 +15,11 @@ pub(super) fn generate_enum(
         .for_each(|v| v.fields.iter().for_each(common::check_field));
     let to_variants = generate_variants(name, variants, TargetTrait::ToBoundedStatic);
     let into_variants = generate_variants(name, variants, TargetTrait::IntoBoundedStatic);
-    let to_bounded_generics =
-        generics::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
+    let to_bounded_generics = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
     let into_bounded_generics =
-        generics::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
-    let unbounded_generics = generics::make_unbounded_generics(generics);
-    let target_generics = generics::make_target_generics(generics);
+        common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
+    let unbounded_generics = common::make_unbounded_generics(generics);
+    let target_generics = common::make_target_generics(generics);
     quote!(
         impl <#(#to_bounded_generics),*> ::bounded_static::ToBoundedStatic for #name <#(#unbounded_generics),*> {
             type Static = #name<#(#target_generics),*>;
