@@ -1,6 +1,6 @@
 ![ci](https://github.com/fujiapple852/bounded_static/actions/workflows/ci.yml/badge.svg)
-[![Documentation](https://docs.rs/bounded-static-derive/badge.svg)](https://docs.rs/bounded-static-derive)
-[![Crate](https://img.shields.io/crates/v/bounded-static-derive.svg)](https://crates.io/crates/bounded-static-derive)
+[![Documentation](https://docs.rs/bounded-static/badge.svg)](https://docs.rs/bounded-static)
+[![Crate](https://img.shields.io/crates/v/bounded-static.svg)](https://crates.io/crates/bounded-static)
 
 # Bounded Static
 An experimental crate that defines the `ToBoundedStatic` and `IntoBoundedStatic` traits, the `ToStatic` macro and 
