@@ -1,5 +1,4 @@
 use crate::common;
-use crate::common::make_bounded_generics;
 use crate::common::TargetTrait;
 use proc_macro2::{Ident, TokenStream};
 use quote::quote;
@@ -12,36 +11,9 @@ pub(super) fn generate_struct_named(
     fields_named: &FieldsNamed,
 ) -> TokenStream {
     fields_named.named.iter().for_each(common::check_field);
-    let to_static_fields =
-        make_named_fields_init_methods(fields_named, TargetTrait::ToBoundedStatic);
-    let into_static_fields =
-        make_named_fields_init_methods(fields_named, TargetTrait::IntoBoundedStatic);
-    let to_static_bounded_generics =
-        common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
-    let into_static_bounded_generics =
-        common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
-    let unbounded_generics = common::make_unbounded_generics(generics);
-    let target_generics = common::make_target_generics(generics);
-    quote!(
-        impl <#(#to_static_bounded_generics),*> ::bounded_static::ToBoundedStatic for #name <#(#unbounded_generics),*> {
-            type Static = #name<#(#target_generics),*>;
-
-            fn to_static(&self) -> Self::Static {
-                #name {
-                    #(#to_static_fields),*
-                }
-            }
-        }
-        impl <#(#into_static_bounded_generics),*> ::bounded_static::IntoBoundedStatic for #name <#(#unbounded_generics),*> {
-            type Static = #name<#(#target_generics),*>;
-
-            fn into_static(self) -> Self::Static {
-                #name {
-                    #(#into_static_fields),*
-                }
-            }
-        }
-    )
+    let to = generate_struct_named_to(name, generics, fields_named);
+    let into = generate_struct_named_into(name, generics, fields_named);
+    quote!(#to #into)
 }
 
 /// Generate `ToBoundedStatic` and `IntoBoundedStatic` impls for a `struct` with unnamed fields deriving `ToStatic`.
@@ -51,48 +23,123 @@ pub(super) fn generate_struct_unnamed(
     fields_unnamed: &FieldsUnnamed,
 ) -> TokenStream {
     fields_unnamed.unnamed.iter().for_each(common::check_field);
-    let to_static_fields = make_unnamed_fields(fields_unnamed, TargetTrait::ToBoundedStatic);
-    let into_static_fields = make_unnamed_fields(fields_unnamed, TargetTrait::IntoBoundedStatic);
-    let to_static_bounded_generics = make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
-    let into_static_bounded_generics =
-        make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
-    let unbounded_generics = common::make_unbounded_generics(generics);
-    let target_generics = common::make_target_generics(generics);
-    quote!(
-        impl <#(#to_static_bounded_generics),*> ::bounded_static::ToBoundedStatic for #name <#(#unbounded_generics),*> {
-            type Static = #name<#(#target_generics),*>;
+    let to = generate_struct_unnamed_to(name, generics, fields_unnamed);
+    let into = generate_struct_unnamed_into(name, generics, fields_unnamed);
+    quote!(#to #into)
+}
 
+/// Generate `ToBoundedStatic` and `IntoBoundedStatic` impls for a unit `struct` deriving `ToStatic`.
+pub(super) fn generate_struct_unit(name: &Ident) -> TokenStream {
+    let to = generate_struct_unit_to(name);
+    let into = generate_struct_unit_into(name);
+    quote!(#to #into)
+}
+
+/// Generate `ToBoundedStatic` for a `struct` with with named fields.
+fn generate_struct_named_to(
+    name: &Ident,
+    generics: &Generics,
+    fields_named: &FieldsNamed,
+) -> TokenStream {
+    let fields = make_named_fields_init_methods(fields_named, TargetTrait::ToBoundedStatic);
+    let gens = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
+    let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
+    let static_gens = common::make_target_generics(generics);
+    quote!(
+        impl #impl_gens ::bounded_static::ToBoundedStatic for #name #ty_gens #where_clause {
+            type Static = #name<#(#static_gens),*>;
             fn to_static(&self) -> Self::Static {
-                #name (
-                    #(#to_static_fields),*
-                )
+                #name {
+                    #(#fields),*
+                }
             }
         }
-        impl <#(#into_static_bounded_generics),*> ::bounded_static::IntoBoundedStatic for #name <#(#unbounded_generics),*> {
-            type Static = #name<#(#target_generics),*>;
+    )
+}
 
+/// Generate `IntoBoundedStatic` for a `struct` with with named fields.
+fn generate_struct_named_into(
+    name: &Ident,
+    generics: &Generics,
+    fields_named: &FieldsNamed,
+) -> TokenStream {
+    let fields = make_named_fields_init_methods(fields_named, TargetTrait::IntoBoundedStatic);
+    let gens = common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
+    let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
+    let static_gens = common::make_target_generics(generics);
+    quote!(
+        impl #impl_gens ::bounded_static::IntoBoundedStatic for #name #ty_gens #where_clause {
+            type Static = #name<#(#static_gens),*>;
             fn into_static(self) -> Self::Static {
+                #name {
+                    #(#fields),*
+                }
+            }
+        }
+    )
+}
+
+/// Generate `ToBoundedStatic` for a `struct` with unnamed fields.
+fn generate_struct_unnamed_to(
+    name: &Ident,
+    generics: &Generics,
+    fields_unnamed: &FieldsUnnamed,
+) -> TokenStream {
+    let fields = make_unnamed_fields(fields_unnamed, TargetTrait::ToBoundedStatic);
+    let gens = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
+    let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
+    let static_gens = common::make_target_generics(generics);
+    quote!(
+        impl #impl_gens ::bounded_static::ToBoundedStatic for #name #ty_gens #where_clause {
+            type Static = #name<#(#static_gens),*>;
+            fn to_static(&self) -> Self::Static {
                 #name (
-                    #(#into_static_fields),*
+                    #(#fields),*
                 )
             }
         }
     )
 }
 
-/// Generate `ToBoundedStatic` and `IntoBoundedStatic` impls for a unit `struct` deriving `ToStatic`.
-pub(super) fn generate_struct_unit(name: &Ident) -> TokenStream {
+/// Generate `IntoBoundedStatic` for a `struct` with unnamed fields.
+fn generate_struct_unnamed_into(
+    name: &Ident,
+    generics: &Generics,
+    fields_unnamed: &FieldsUnnamed,
+) -> TokenStream {
+    let fields = make_unnamed_fields(fields_unnamed, TargetTrait::IntoBoundedStatic);
+    let gens = common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
+    let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
+    let static_gens = common::make_target_generics(generics);
+    quote!(
+        impl #impl_gens ::bounded_static::IntoBoundedStatic for #name #ty_gens #where_clause {
+            type Static = #name<#(#static_gens),*>;
+            fn into_static(self) -> Self::Static {
+                #name (
+                    #(#fields),*
+                )
+            }
+        }
+    )
+}
+
+/// Generate `ToBoundedStatic` for unit struct.
+fn generate_struct_unit_to(name: &Ident) -> TokenStream {
     quote!(
         impl ::bounded_static::ToBoundedStatic for #name {
             type Static = #name;
-
             fn to_static(&self) -> Self::Static {
                 #name
             }
         }
+    )
+}
+
+/// Generate `IntoBoundedStatic` for unit struct.
+fn generate_struct_unit_into(name: &Ident) -> TokenStream {
+    quote!(
         impl ::bounded_static::IntoBoundedStatic for #name {
             type Static = #name;
-
             fn into_static(self) -> Self::Static {
                 #name
             }
