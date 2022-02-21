@@ -3,8 +3,11 @@
 [![Crate](https://img.shields.io/crates/v/bounded-static.svg)](https://crates.io/crates/bounded-static)
 
 # Bounded Static
-An experimental crate that defines the `ToBoundedStatic` and `IntoBoundedStatic` traits, the `ToStatic` macro and 
-provides impls for common types.  This crate has zero-dependencies, is `no_std` friendly and forbids `unsafe` code.
+An experimental crate that defines the [`ToBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.ToBoundedStatic.html) 
+and [`IntoBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.IntoBoundedStatic.html) traits, 
+the [`ToStatic`](https://docs.rs/bounded-static/latest/bounded_static/derive.ToStatic.html) macro and provides impls 
+for common types.  This crate has zero-dependencies, is `no_std` friendly and 
+forbids `unsafe` code.
 
 As described in
 the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
