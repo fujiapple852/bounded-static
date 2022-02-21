@@ -244,18 +244,14 @@ make_primitive_impl!(i128);
 impl ToBoundedStatic for () {
     type Static = ();
 
-    fn to_static(&self) -> Self::Static {
-        *self
-    }
+    fn to_static(&self) -> Self::Static {}
 }
 
 /// No-op [`IntoBoundedStatic`] impl for unit type `()`.
 impl IntoBoundedStatic for () {
     type Static = ();
 
-    fn into_static(self) -> Self::Static {
-        self
-    }
+    fn into_static(self) -> Self::Static {}
 }
 
 /// Blanket [`ToBoundedStatic`] impl for converting `Option<T>` to `Option<T>: 'static`.
