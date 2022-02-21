@@ -13,29 +13,41 @@ pub(super) fn generate_enum(
     variants
         .iter()
         .for_each(|v| v.fields.iter().for_each(common::check_field));
-    let to_variants = generate_variants(name, variants, TargetTrait::ToBoundedStatic);
-    let into_variants = generate_variants(name, variants, TargetTrait::IntoBoundedStatic);
-    let to_bounded_generics = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
-    let into_bounded_generics =
-        common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
-    let unbounded_generics = common::make_unbounded_generics(generics);
-    let target_generics = common::make_target_generics(generics);
-    quote!(
-        impl <#(#to_bounded_generics),*> ::bounded_static::ToBoundedStatic for #name <#(#unbounded_generics),*> {
-            type Static = #name<#(#target_generics),*>;
+    let to = generate_enum_to(name, generics, variants);
+    let into = generate_enum_into(name, generics, variants);
+    quote!(#to #into)
+}
 
+/// Generate `ToBoundedStatic` for an enum.
+fn generate_enum_to(name: &Ident, generics: &Generics, variants: &[&Variant]) -> TokenStream {
+    let arms = generate_match_arms(name, variants, TargetTrait::ToBoundedStatic);
+    let gens = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
+    let (impl_gens, to_ty_gens, to_where) = gens.split_for_impl();
+    let static_gens = common::make_target_generics(generics);
+    quote!(
+        impl #impl_gens ::bounded_static::ToBoundedStatic for #name #to_ty_gens #to_where {
+            type Static = #name<#(#static_gens),*>;
             fn to_static(&self) -> Self::Static {
                 match self {
-                    #(#to_variants),*
+                    #(#arms),*
                 }
             }
         }
-        impl <#(#into_bounded_generics),*> ::bounded_static::IntoBoundedStatic for #name <#(#unbounded_generics),*> {
-            type Static = #name<#(#target_generics),*>;
+    )
+}
 
+/// Generate `IntoBoundedStatic` for an enum.
+fn generate_enum_into(name: &Ident, generics: &Generics, variants: &[&Variant]) -> TokenStream {
+    let arms = generate_match_arms(name, variants, TargetTrait::IntoBoundedStatic);
+    let gens = common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
+    let (impl_gens, into_ty_gens, into_where) = gens.split_for_impl();
+    let static_gens = common::make_target_generics(generics);
+    quote!(
+        impl #impl_gens ::bounded_static::IntoBoundedStatic for #name #into_ty_gens #into_where {
+            type Static = #name<#(#static_gens),*>;
             fn into_static(self) -> Self::Static {
                 match self {
-                    #(#into_variants),*
+                    #(#arms),*
                 }
             }
         }
@@ -51,7 +63,11 @@ pub(super) fn generate_enum(
 /// *Named*: `Foo::Bar { a, b } => Foo::Bar { a: a.to_static(), b: b.to_static() }`
 ///
 /// *Unnamed*: `Foo::Bar(a, b) => Foo::Bar(a.to_static(), b.to_static())`
-fn generate_variants(name: &Ident, variants: &[&Variant], target: TargetTrait) -> Vec<TokenStream> {
+fn generate_match_arms(
+    name: &Ident,
+    variants: &[&Variant],
+    target: TargetTrait,
+) -> Vec<TokenStream> {
     variants
         .iter()
         .map(|variant| match &variant.fields {

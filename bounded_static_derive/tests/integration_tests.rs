@@ -269,6 +269,61 @@ fn test_const_generics_struct_into() {
     ensure_static(owned);
 }
 
+#[test]
+fn test_generic_bound_1() {
+    #[derive(ToStatic)]
+    struct Baz<'a, T: Into<String> + 'a> {
+        t: T,
+        r: Cow<'a, str>,
+    }
+    let value = String::from("test");
+    let data = Baz {
+        t: "",
+        r: Cow::from(&value),
+    };
+    ensure_static(data.to_static());
+}
+
+#[test]
+fn test_generic_bound_2() {
+    trait Foo {}
+    trait Bar {}
+
+    impl Foo for String {}
+    impl Bar for String {}
+    impl<T: ToOwned + ?Sized> Foo for Cow<'_, T> {}
+    impl<T: ToOwned + ?Sized> Bar for Cow<'_, T> {}
+
+    #[derive(ToStatic)]
+    struct Baz<T: Foo + Bar, R: Foo> {
+        t: T,
+        r: R,
+    }
+    let value = String::from("test");
+    let data = Baz {
+        t: Cow::from(&value),
+        r: String::from("test"),
+    };
+    ensure_static(data.to_static());
+}
+
+#[test]
+fn test_generic_bound_3() {
+    #[derive(ToStatic)]
+    struct Baz<'a, T: Into<String>>(T, Cow<'a, str>);
+    let value = String::from("test");
+    let data = Baz("", Cow::from(&value));
+    ensure_static(data.to_static());
+}
+
+#[test]
+fn test_no_generics_or_lifetimes() {
+    #[derive(ToStatic)]
+    struct Foo(u32);
+    let data = Foo(0);
+    ensure_static(data.to_static())
+}
+
 fn ensure_static<S: 'static>(s: S) {
     drop(s);
 }
