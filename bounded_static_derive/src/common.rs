@@ -64,6 +64,7 @@ impl TargetTrait {
 pub(super) fn check_field(field: &Field) {
     if let Type::Reference(ty) = &field.ty {
         if let Some(Lifetime { ident, .. }) = &ty.lifetime {
+            #[allow(clippy::manual_assert)]
             if *ident != "static" {
                 panic!(
                     "non-static references cannot be made static: {:?}",
