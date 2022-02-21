@@ -1,8 +1,8 @@
 #![doc(html_root_url = "https://docs.rs/bounded-static-derive/0.1.0")]
 //! Provides the `ToStatic` derive macro.
 //!
-//! The [`ToStatic`] derive macro implements the [`ToBoundedStatic`](https://docs.rs/bounded_static/trait.ToBoundedStatic.html)
-//! and [`IntoBoundedStatic`](https://docs.rs/bounded_static/trait.IntoBoundedStatic.html) traits for any `struct`
+//! The [`ToStatic`] derive macro implements the [`ToBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.ToBoundedStatic.html)
+//! and [`IntoBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.IntoBoundedStatic.html) traits for any `struct`
 //! and `enum` that can be converted to a form that is bounded by `'static`.
 //!
 //! The [`ToStatic`] macro should be used via the [`bounded-static`](https://docs.rs/crates/bounded-static) crate
@@ -19,8 +19,8 @@ mod data_struct;
 
 /// The `ToStatic` derive macro.
 ///
-/// Generate [`ToBoundedStatic`](https://docs.rs/bounded_static/trait.ToBoundedStatic.html) and
-/// [`IntoBoundedStatic`](https://docs.rs/bounded_static/trait.IntoBoundedStatic.html) impls for the data item deriving
+/// Generate [`ToBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.ToBoundedStatic.html) and
+/// [`IntoBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.IntoBoundedStatic.html) impls for the data item deriving
 /// `ToStatic`.
 #[proc_macro_derive(ToStatic)]
 pub fn to_static(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
