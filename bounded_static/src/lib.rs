@@ -240,6 +240,24 @@ make_primitive_impl!(i32);
 make_primitive_impl!(i64);
 make_primitive_impl!(i128);
 
+/// No-op [`ToBoundedStatic`] impl for unit type `()`.
+impl ToBoundedStatic for () {
+    type Static = ();
+
+    fn to_static(&self) -> Self::Static {
+        *self
+    }
+}
+
+/// No-op [`IntoBoundedStatic`] impl for unit type `()`.
+impl IntoBoundedStatic for () {
+    type Static = ();
+
+    fn into_static(self) -> Self::Static {
+        self
+    }
+}
+
 /// Blanket [`ToBoundedStatic`] impl for converting `Option<T>` to `Option<T>: 'static`.
 impl<T> ToBoundedStatic for Option<T>
 where
@@ -689,6 +707,11 @@ mod core_tests {
     #[test]
     fn test_i128() {
         ensure_static(0i128.to_static());
+    }
+
+    #[test]
+    fn test_unit() {
+        ensure_static(().to_static())
     }
 
     #[test]
