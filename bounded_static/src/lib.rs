@@ -699,16 +699,23 @@ mod core_tests {
     }
 
     #[test]
-    fn test_array() {
-        let arr = ["test"];
-        ensure_static(arr.to_static());
+    fn test_option_none() {
+        let value: Option<u32> = None;
+        let to_static = value.to_static();
+        ensure_static(to_static);
     }
 
     #[test]
-    fn test_array_into() {
-        let s = String::from("");
-        let arr = [Cow::from(&s)];
-        ensure_static(arr.into_static());
+    fn test_option_some() {
+        let value: Option<u32> = Some(32);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_array() {
+        let arr = ["test"];
+        ensure_static(arr.to_static());
     }
 }
 
@@ -761,6 +768,34 @@ mod alloc_tests {
     }
 
     #[test]
+    fn test_option_none() {
+        let value: Option<Cow<'_, str>> = None;
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_option_some() {
+        let s = String::from("");
+        let value = Some(Cow::from(&s));
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_array() {
+        let arr = ["test"];
+        ensure_static(arr.to_static());
+    }
+
+    #[test]
+    fn test_array_into() {
+        let s = String::from("");
+        let arr = [Cow::from(&s)];
+        ensure_static(arr.into_static());
+    }
+
+    #[test]
     fn test_vec1() {
         let s = String::from("");
         let value = alloc::vec![Cow::from(&s)];
@@ -772,21 +807,6 @@ mod alloc_tests {
     fn test_vec2() {
         let s = String::from("");
         let value = alloc::vec![Cow::from(&s), Cow::from(s.as_str())];
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_option_none() {
-        let value: Option<Cow<'_, str>> = None;
-        let to_static = value.to_static();
-        ensure_static(to_static);
-    }
-
-    #[test]
-    fn test_option_some() {
-        let s = String::from("");
-        let value = Some(Cow::from(&s));
         let to_static = value.to_static();
         ensure_static(to_static);
     }
