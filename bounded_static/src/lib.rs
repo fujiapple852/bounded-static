@@ -204,6 +204,7 @@ impl IntoBoundedStatic for &'static str {
 /// No-op [`ToBoundedStatic`] and [`IntoBoundedStatic`] impls for primitive types.
 macro_rules! make_primitive_impl {
     ($id:ident) => {
+        /// No-op [`ToBoundedStatic`] impl for this primitive type.
         impl ToBoundedStatic for $id {
             type Static = $id;
 
@@ -211,6 +212,7 @@ macro_rules! make_primitive_impl {
                 *self
             }
         }
+        /// No-op [`IntoBoundedStatic`] impl for this primitive type.
         impl IntoBoundedStatic for $id {
             type Static = $id;
 
