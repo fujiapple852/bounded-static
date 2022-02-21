@@ -129,4 +129,4 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --workspace --all-features --tests
+          args: --workspace --all-features --tests -- -Dwarnings
