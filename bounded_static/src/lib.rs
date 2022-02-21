@@ -282,6 +282,38 @@ where
     }
 }
 
+/// Blanket [`ToBoundedStatic`] impl for converting `Result<T, E>` into `Result<T, E>: 'static`.
+impl<T, E> ToBoundedStatic for Result<T, E>
+where
+    T: ToBoundedStatic,
+    E: ToBoundedStatic,
+{
+    type Static = Result<T::Static, E::Static>;
+
+    fn to_static(&self) -> Self::Static {
+        match self {
+            Ok(value) => Ok(value.to_static()),
+            Err(err) => Err(err.to_static()),
+        }
+    }
+}
+
+/// Blanket [`IntoBoundedStatic`] impl for converting `Result<T, E>` into `Result<T, E>: 'static`.
+impl<T, E> IntoBoundedStatic for Result<T, E>
+where
+    T: IntoBoundedStatic,
+    E: IntoBoundedStatic,
+{
+    type Static = Result<T::Static, E::Static>;
+
+    fn into_static(self) -> Self::Static {
+        match self {
+            Ok(value) => Ok(value.into_static()),
+            Err(err) => Err(err.into_static()),
+        }
+    }
+}
+
 /// Blanket [`ToBoundedStatic`] impl for converting `[T; const N: usize]` into `[T; const N: usize]: 'static`.
 impl<T, const N: usize> ToBoundedStatic for [T; N]
 where
@@ -733,6 +765,31 @@ mod core_tests {
         let value: Option<u32> = Some(32);
         let to_static = value.to_static();
         ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_result() {
+        #[derive(Clone)]
+        struct MyError;
+        fn foo_ok() -> Result<(), MyError> {
+            Ok(())
+        }
+        fn foo_err() -> Result<(), MyError> {
+            Err(MyError)
+        }
+        impl ToBoundedStatic for MyError {
+            type Static = MyError;
+
+            fn to_static(&self) -> Self::Static {
+                self.clone()
+            }
+        }
+        let ok_result = foo_ok();
+        ensure_static(ok_result.to_static());
+        assert!(ok_result.is_ok());
+        let err_result = foo_err();
+        ensure_static(err_result.to_static());
+        assert!(err_result.is_err())
     }
 
     #[test]
