@@ -739,7 +739,8 @@ mod core_tests {
 
     #[test]
     fn test_unit() {
-        ensure_static(().to_static())
+        #[allow(clippy::unit_arg)]
+        ensure_static(().to_static());
     }
 
     #[test]
@@ -767,14 +768,16 @@ mod core_tests {
     fn test_result() {
         #[derive(Clone)]
         struct MyError;
+        #[allow(clippy::unnecessary_wraps)]
         fn foo_ok() -> Result<(), MyError> {
             Ok(())
         }
+        #[allow(clippy::unnecessary_wraps)]
         fn foo_err() -> Result<(), MyError> {
             Err(MyError)
         }
         impl ToBoundedStatic for MyError {
-            type Static = MyError;
+            type Static = Self;
 
             fn to_static(&self) -> Self::Static {
                 self.clone()
@@ -785,7 +788,7 @@ mod core_tests {
         assert!(ok_result.is_ok());
         let err_result = foo_err();
         ensure_static(err_result.to_static());
-        assert!(err_result.is_err())
+        assert!(err_result.is_err());
     }
 
     #[test]
