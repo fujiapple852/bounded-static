@@ -27,15 +27,41 @@ Experimental
 
 ## FAQ
 
-### Why is this useful?
+### When is this useful?
 
-This is mainly useful when dealing with nested `Cow<T>` data structures.
+This is useful for data structures which directly or indirectly contain `Cow<T>` types that must be supplied to 
+a function which requires the `'static` bound (i.e. [`std::thread::spawn`](https://doc.rust-lang.org/std/thread/fn.spawn.html)):
+
+```rust
+#[derive(Debug, PartialEq, ToStatic)]
+struct Foo<'a> {
+    foo: Cow<'a, str>,
+    bar: Vec<Bar<'a>>
+}
+#[derive(Debug, PartialEq, ToStatic)]
+enum Bar<'a> {
+    First,
+    Second(Cow<'a, str>),
+}
+
+fn main() {
+    let value = String::from("data");
+    let foo = Foo {
+        foo: Cow::from(&value),
+        bar: vec![Bar::First, Bar::Second(Cow::from(&value))]
+    };
+    let foo_static = foo.into_static();
+    std::thread::spawn(move || {
+        assert_eq!(foo_static.foo, "data");
+        assert_eq!(foo_static.bar, vec![Bar::First, Bar::Second("data".into())])
+    }).join().unwrap();
+}
+```
 
 ### How does this differ from the `ToOwned` trait?
 
 The [`ToOwned`](https://doc.rust-lang.org/std/borrow/trait.ToOwned.html) trait defines an associated type `Owned` which
-is bound by [`Borrow<Self>`](https://doc.rust-lang.org/std/borrow/trait.Borrow.html) but not by `'static`.  Therefore,
-the follow will not compile:
+is not bound by `'static` and therefore the follow will not compile:
 
 ```rust
 use std::borrow::Cow;
@@ -54,7 +80,7 @@ fn main() {
 }
 ```
 
-Results in:
+Results in the following error:
 
 ```
 error[E0597]: `s` does not live long enough
@@ -68,6 +94,26 @@ error[E0597]: `s` does not live long enough
 13 |     ensure_static(foo.to_owned())
 14 | }
    | - `s` dropped here while still borrowed
+```
+
+Replacing `Clone` with `ToStatic` and using `into_static()` (or `to_static()` as needed) allows the example to compile:
+
+```rust
+use std::borrow::Cow;
+
+fn main() {
+
+    #[derive(ToStatic)]
+    struct Foo<'a> {
+        foo: Cow<'a, str>,
+    }
+
+    fn ensure_static<T: 'static>(_: T) {}
+
+    let s = String::from("data");
+    let foo = Foo { foo: Cow::from(&s) };
+    ensure_static(foo.into_static())
+}
 ```
 
 ## License
