@@ -243,6 +243,35 @@ fn test_enum_into() {
 }
 
 #[test]
+fn test_thread_spawn() {
+    #[derive(Debug, PartialEq, ToStatic)]
+    struct Foo<'a> {
+        foo: Cow<'a, str>,
+        bar: Vec<Bar<'a>>,
+    }
+    #[derive(Debug, PartialEq, ToStatic)]
+    enum Bar<'a> {
+        First,
+        Second(Cow<'a, str>),
+    }
+    let value = String::from("data");
+    let data = Foo {
+        foo: Cow::from(&value),
+        bar: vec![Bar::First, Bar::Second(Cow::from(&value))],
+    };
+    let data_static = data.into_static();
+    std::thread::spawn(move || {
+        assert_eq!(data_static.foo, "data");
+        assert_eq!(
+            data_static.bar,
+            vec![Bar::First, Bar::Second("data".into())]
+        )
+    })
+    .join()
+    .unwrap();
+}
+
+#[test]
 fn test_const_generics_struct() {
     #[derive(ToStatic)]
     struct Foo<'a, const N: usize, const M: usize> {
