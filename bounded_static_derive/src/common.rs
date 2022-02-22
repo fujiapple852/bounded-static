@@ -184,26 +184,58 @@ fn make_bounded_generic_predicates(
 /// i.e. given:
 ///
 /// ```rust
-/// struct Baz<T: Into<String>> {
+/// # trait Foo {}
+/// struct Baz<T: Into<String>> where T: Foo {
 ///     t: T,
 /// }
 /// ```
 ///
-/// The generated trait impl must reflect the original generic bounds for the associated type `Static` such that:
-/// `T::Static: Into<String>`.
+/// The generated trait impl associated type `Static` must reflect the original generic bounds as well as any
+/// additional bounds from a `where` clause.  For the example above the associated type bound would be
+/// `T::Static: Into<String> + Foo`.
 fn make_static_generic_predicates(generics: &Generics) -> Vec<WherePredicate> {
     generics
         .params
         .iter()
         .filter_map(|param| match param {
-            GenericParam::Type(ty) => {
-                let var = &ty.ident;
-                let bounds = &ty.bounds;
-                Some(parse_quote!(#var::Static: #bounds))
+            GenericParam::Type(param_ty) => {
+                let var = &param_ty.ident;
+                let param_ty_bounds = &param_ty.bounds;
+                match find_predicate(generics.where_clause.as_ref(), var) {
+                    None if param_ty_bounds.is_empty() => None,
+                    None => Some(parse_quote!(#var::Static: #param_ty_bounds)),
+                    Some(predicate_ty) => {
+                        let predicate_bounds = &predicate_ty.bounds;
+                        if param_ty_bounds.is_empty() {
+                            Some(parse_quote!(#var::Static: #predicate_bounds))
+                        } else {
+                            Some(parse_quote!(#var::Static: #param_ty_bounds + #predicate_bounds))
+                        }
+                    }
+                }
             }
             _ => None,
         })
         .collect()
+}
+
+/// Search the given `WhereClause` for a `WherePredicate` which matches the given `Ident`.
+fn find_predicate<'a>(
+    where_clause: Option<&'a WhereClause>,
+    var: &Ident,
+) -> Option<&'a PredicateType> {
+    where_clause
+        .as_ref()
+        .map(|WhereClause { predicates, .. }| predicates)
+        .and_then(|predicate| {
+            predicate.iter().find_map(|p| match p {
+                WherePredicate::Type(ty) => match &ty.bounded_ty {
+                    Type::Path(path) => path.path.is_ident(var).then(|| ty),
+                    _ => None,
+                },
+                _ => None,
+            })
+        })
 }
 
 /// Clone and add a bound to a type.

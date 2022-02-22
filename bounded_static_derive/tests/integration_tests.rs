@@ -51,6 +51,14 @@ fn test_struct_named_fields_2() {
 }
 
 #[test]
+fn test_no_generics_or_lifetimes() {
+    #[derive(ToStatic)]
+    struct Foo(u32);
+    let data = Foo(0);
+    ensure_static(data.to_static())
+}
+
+#[test]
 fn test_struct_named_fields_no_generics() {
     #[derive(ToStatic)]
     struct Foo {
@@ -116,6 +124,7 @@ fn test_struct_complex_lifetimes() {
         b: Cow<'b, str>,
         r: R,
     }
+
     let value = String::from("value");
     let data = Foo {
         baz: 0isize,
@@ -317,11 +326,31 @@ fn test_generic_bound_3() {
 }
 
 #[test]
-fn test_no_generics_or_lifetimes() {
+fn test_generic_bound_where_1() {
     #[derive(ToStatic)]
-    struct Foo(u32);
-    let data = Foo(0);
-    ensure_static(data.to_static())
+    struct Baz<'a, T: Foo>(T, Cow<'a, str>)
+    where
+        T: Into<String>;
+    trait Foo {}
+    impl Foo for &str {}
+    let value = String::from("test");
+    let data = Baz("", Cow::from(&value));
+    ensure_static(data.to_static());
+}
+
+#[test]
+fn test_generic_bound_where_2() {
+    #[derive(ToStatic)]
+    struct Baz<'a, T: Foo>(T, Cow<'a, str>)
+    where
+        T: Into<String> + 'a + Bar;
+    trait Foo {}
+    impl Foo for &str {}
+    trait Bar {}
+    impl Bar for &str {}
+    let value = String::from("test");
+    let data = Baz("", Cow::from(&value));
+    ensure_static(data.into_static());
 }
 
 fn ensure_static<S: 'static>(s: S) {
