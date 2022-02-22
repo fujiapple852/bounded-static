@@ -21,6 +21,8 @@ method to convert to that bounded type.
 The macros `ToStatic` can be used to automatically derive `ToBoundedStatic` and `IntoBoundedStatic` for any `struct` 
 or `enum` that can be converted to a form that is bounded by `'static`.
 
+Refer to the crate [`documentation`](https://docs.rs/bounded-static/latest/bounded_static) for details and examples.
+
 ## Status
 
 Experimental
