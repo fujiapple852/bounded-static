@@ -19,6 +19,6 @@ bounded-static = { version = "0.2.0", features = [ "derive" ] }
 
 `bounded-static-derive` is distributed under the terms of the Apache License (Version 2.0).
 
-See [LICENSE](../LICENSE) for details.
+See [LICENSE](LICENSE) for details.
 
 Copyright 2022
