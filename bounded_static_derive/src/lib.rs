@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://docs.rs/bounded-static-derive/0.1.0")]
+#![doc(html_root_url = "https://docs.rs/bounded-static-derive/0.2.0")]
 //! Provides the `ToStatic` derive macro.
 //!
 //! The [`ToStatic`] derive macro implements the [`ToBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.ToBoundedStatic.html)
