@@ -1,6 +1,6 @@
 [package]
 name = "bounded-static"
-version = "0.2.0"
+version = "0.2.1"
 rust-version = "1.58.1"
 edition = "2021"
 authors = ["FujiApple <fujiapple852@gmail.com>"]
@@ -27,7 +27,7 @@ std = [ "alloc" ]
 derive = [ "bounded-static-derive" ]
 
 [dependencies]
-bounded-static-derive = { version = "0.2.0", path = "../bounded_static_derive", optional = true }
+bounded-static-derive = { version = "0.2.1", path = "../bounded_static_derive", optional = true }
 
 [package.metadata.docs.rs]
 all-features = true

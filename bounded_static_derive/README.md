@@ -12,7 +12,7 @@ The `ToStatic` macro should be used via the [`bounded-static`](https://docs.rs/b
 than using this crate directly.
 
 ```yaml
-bounded-static = { version = "0.2.0", features = [ "derive" ] }
+bounded-static = { version = "0.2.1", features = [ "derive" ] }
 ```
 
 ## License
