@@ -4,11 +4,11 @@
 # Bounded Static Derive
 
 This crate provides the `ToStatic` macro which can be used to derive implementations of
-the [`ToBoundedStatic`](https://docs.rs/bounded_static/trait.ToBoundedStatic.html) and
-[`IntoBoundedStatic`](https://docs.rs/bounded_static/trait.IntoBoundedStatic.html) traits for all `struct`and `enum`
+the [`ToBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.ToBoundedStatic.html) and
+[`IntoBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.IntoBoundedStatic.html) traits for all `struct`and `enum`
 that can be converted to a form that is bounded by `'static`.
 
-The `ToStatic` macro should be used via the [`bounded-static`](https://docs.rs/crates/bounded-static) crate rather
+The `ToStatic` macro should be used via the [`bounded-static`](https://docs.rs/bounded-static/latest/bounded_static) crate rather
 than using this crate directly.
 
 ```yaml
