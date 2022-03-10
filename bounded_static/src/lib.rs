@@ -25,8 +25,10 @@
 //!
 //! Implementations of [`ToBoundedStatic`] and [`IntoBoundedStatic`] are provided for the following `core` types:
 //!
-//! - [Primitives](https://doc.rust-lang.org/core/primitive/index.html) (no-op conversions)
-//! - [Option](https://doc.rust-lang.org/core/option/enum.Option.html)
+//! - [`primitive`](core::primitive) (no-op conversions)
+//! - [`array`](array)
+//! - [`Option`](core::option::Option)
+//! - [`Result`](core::result::Result)
 //!
 //! Additional implementations are available by enabling the following features:
 //!
