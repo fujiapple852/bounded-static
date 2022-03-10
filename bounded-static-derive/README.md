@@ -1,14 +1,14 @@
-[![Documentation](https://docs.rs/bounded-static-derive/badge.svg)](https://docs.rs/bounded-static-derive)
-[![Crate](https://img.shields.io/crates/v/bounded-static-derive.svg)](https://crates.io/crates/bounded-static-derive)
+[![Documentation](https://docs.rs/bounded-static-derive/badge.svg)](https://docs.rs/bounded-static-derive/0.2.1)
+[![Crate](https://img.shields.io/crates/v/bounded-static-derive.svg)](https://crates.io/crates/bounded-static-derive/0.2.1)
 
 # Bounded Static Derive
 
 This crate provides the `ToStatic` macro which can be used to derive implementations of
-the [`ToBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.ToBoundedStatic.html) and
-[`IntoBoundedStatic`](https://docs.rs/bounded-static/latest/bounded_static/trait.IntoBoundedStatic.html) traits for all `struct`and `enum`
+the [`ToBoundedStatic`](https://docs.rs/bounded-static/0.2.1/bounded_static/trait.ToBoundedStatic.html) and
+[`IntoBoundedStatic`](https://docs.rs/bounded-static/0.2.1/bounded_static/trait.IntoBoundedStatic.html) traits for all `struct`and `enum`
 that can be converted to a form that is bounded by `'static`.
 
-The `ToStatic` macro should be used via the [`bounded-static`](https://docs.rs/bounded-static/latest/bounded_static) crate rather
+The `ToStatic` macro should be used via the [`bounded-static`](https://docs.rs/bounded-static/0.2.1/bounded_static) crate rather
 than using this crate directly.
 
 ```yaml
