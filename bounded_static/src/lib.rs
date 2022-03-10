@@ -280,7 +280,7 @@ where
     }
 }
 
-/// Blanket [`ToBoundedStatic`] impl for converting `Result<T, E>` into `Result<T, E>: 'static`.
+/// Blanket [`ToBoundedStatic`] impl for converting `Result<T, E>` to `Result<T, E>: 'static`.
 impl<T, E> ToBoundedStatic for Result<T, E>
 where
     T: ToBoundedStatic,
@@ -312,7 +312,7 @@ where
     }
 }
 
-/// Blanket [`ToBoundedStatic`] impl for converting `[T; const N: usize]` into `[T; const N: usize]: 'static`.
+/// Blanket [`ToBoundedStatic`] impl for converting `[T; const N: usize]` to `[T; const N: usize]: 'static`.
 impl<T, const N: usize> ToBoundedStatic for [T; N]
 where
     T: ToBoundedStatic + Copy,
