@@ -1,4 +1,4 @@
-![ci](https://github.com/fujiapple852/bounded_static/actions/workflows/ci.yml/badge.svg)
+![ci](https://github.com/fujiapple852/bounded-static/actions/workflows/ci.yml/badge.svg)
 [![Documentation](https://docs.rs/bounded-static/badge.svg)](https://docs.rs/bounded-static/0.2.1)
 [![Crate](https://img.shields.io/crates/v/bounded-static.svg)](https://crates.io/crates/bounded-static/0.2.1)
 
