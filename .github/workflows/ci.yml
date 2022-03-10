@@ -51,6 +51,24 @@ jobs:
           command: check
           args: --workspace --no-default-features --features derive
 
+      - name: check --no-default-features --features smol_str
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --workspace --no-default-features --features smol_str
+
+      - name: check --no-default-features --features smallvec
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --workspace --no-default-features --features smallvec
+
+      - name: check --no-default-features --features smartstring
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+          args: --workspace --no-default-features --features smartstring
+
       - name: check --all-features
         uses: actions-rs/cargo@v1
         with:
