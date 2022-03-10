@@ -57,11 +57,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Initial release of `bounded-static` and `bounded-static-derive`
 
-[bounded-static-0.2.1]: https://github.com/fujiapple852/bounded_static/compare/bounded-static-0.2.0...bounded-static-0.2.1
-[bounded-static-derive-0.2.1]: https://github.com/fujiapple852/bounded_static/compare/bounded-static-0.2.0...bounded-static-derive-0.2.1
+[bounded-static-0.2.1]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.0...bounded-static-0.2.1
+[bounded-static-derive-0.2.1]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.0...bounded-static-derive-0.2.1
 
-[bounded-static-0.2.0]: https://github.com/fujiapple852/bounded_static/compare/bounded-static-0.1.0...bounded-static-0.2.0
-[bounded-static-derive-0.2.0]: https://github.com/fujiapple852/bounded_static/compare/bounded-static-0.1.0...bounded-static-derive-0.2.0
+[bounded-static-0.2.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.1.0...bounded-static-0.2.0
+[bounded-static-derive-0.2.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.1.0...bounded-static-derive-0.2.0
 
-[bounded-static-0.1.0]: https://github.com/fujiapple852/bounded_static/compare/bounded-static-0.0.0...bounded-static-0.1.0
-[bounded-static-derive-0.1.0]: https://github.com/fujiapple852/bounded_static/compare/bounded-static-0.0.0...bounded-static-derive-0.1.0
+[bounded-static-0.1.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.0.0...bounded-static-0.1.0
+[bounded-static-derive-0.1.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.0.0...bounded-static-derive-0.1.0
