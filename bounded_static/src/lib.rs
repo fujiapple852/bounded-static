@@ -27,6 +27,7 @@
 //!
 //! - [`primitive`](core::primitive) (no-op conversions)
 //! - [`array`](array)
+//! - [`tuple`](tuple)
 //! - [`Option`](core::option::Option)
 //! - [`Result`](core::result::Result)
 //!
@@ -336,6 +337,63 @@ where
         self.map(IntoBoundedStatic::into_static)
     }
 }
+
+/// Blanket [`ToBoundedStatic`] impl for converting tuples `(T1, T2, ...)` to `(T1, T2, ..): 'static`.
+macro_rules! tuple_to_static {
+    () => ();
+    ($($name:ident,)+) => {
+        tuple_to_static! (
+            @gen $($name,)+,
+            concat!(
+                "Blanket [`ToBoundedStatic`] impl for converting tuple `",
+                stringify!(($($name,)+)), "` to `", stringify!(($($name,)+)), ": 'static `"
+            )
+        );
+    };
+    (@gen $($name:ident,)+, $doc:expr) => {
+        #[doc = $doc]
+        impl<$($name: ToBoundedStatic),+> ToBoundedStatic for ($($name,)+) {
+            type Static = ($($name::Static,)+);
+            #[allow(non_snake_case)]
+            fn to_static(&self) -> Self::Static {
+                let ($(ref $name,)+) = *self;
+                ($($name.to_static(),)+)
+            }
+        }
+        tuple_to_static! {@peel $($name,)+ }
+    };
+    (@peel $name:ident, $($other:ident,)*) => {tuple_to_static! { $($other,)* }};
+}
+
+/// Blanket [`IntoBoundedStatic`] impl for converting tuples `(T1, T2, ...)` into `(T1, T2, ..): 'static`.
+macro_rules! tuple_into_static {
+    () => ();
+    ($($name:ident,)+) => {
+        tuple_into_static! (
+            @gen $($name,)+,
+            concat!(
+                "Blanket [`IntoBoundedStatic`] impl for converting tuple `",
+                stringify!(($($name,)+)), "` into `", stringify!(($($name,)+)), ": 'static `"
+            )
+        );
+    };
+    (@gen $($name:ident,)+, $doc:expr) => {
+        #[doc = $doc]
+        impl<$($name: IntoBoundedStatic),+> IntoBoundedStatic for ($($name,)+) {
+            type Static = ($($name::Static,)+);
+            #[allow(non_snake_case)]
+            fn into_static(self) -> Self::Static {
+                let ($($name,)+) = self;
+                ($($name.into_static(),)+)
+            }
+        }
+        tuple_into_static! {@peel $($name,)+ }
+    };
+    (@peel $name:ident, $($other:ident,)*) => {tuple_into_static! { $($other,)* }};
+}
+
+tuple_to_static! { T11, T10, T9, T8, T7, T6, T5, T4, T3, T2, T1, T0, }
+tuple_into_static! { T11, T10, T9, T8, T7, T6, T5, T4, T3, T2, T1, T0, }
 
 #[cfg(feature = "alloc")]
 /// Blanket [`ToBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` to `Cow<'static, T: ?Sized>`.
@@ -797,6 +855,31 @@ mod core_tests {
     fn test_array() {
         let arr = ["test"];
         ensure_static(arr.to_static());
+    }
+
+    #[test]
+    fn test_tuple2() {
+        let tuple = ("test", 32);
+        ensure_static(tuple.to_static());
+    }
+
+    #[test]
+    fn test_tuple11() {
+        let tuple = (
+            (),
+            '1',
+            "2",
+            3_i32,
+            4_usize,
+            5_isize,
+            6.0_f64,
+            ["7"],
+            Some(8),
+            9,
+            (10,),
+            false,
+        );
+        ensure_static(tuple.to_static());
     }
 }
 
