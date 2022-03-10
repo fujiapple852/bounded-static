@@ -52,6 +52,10 @@
 //!
 //! Note that `collections`, `alloc` and `std` are enabled be default.
 //!
+//! Additional implementations for 3rd party types are available by enabling the following features:
+//!
+//! - `smol_str` for [`SmolStr`](https://docs.rs/smol_str/0.1.21/smol_str/struct.SmolStr.html)
+//!
 //! # Examples
 //!
 //! Given a structure which can be borrow or owned and a function which requires its argument is bounded by the
@@ -709,6 +713,26 @@ where
     }
 }
 
+/// [`ToBoundedStatic`] impl for `smol_str::SmolStr`.
+#[cfg(feature = "smol_str")]
+impl ToBoundedStatic for smol_str::SmolStr {
+    type Static = Self;
+
+    fn to_static(&self) -> Self::Static {
+        self.clone()
+    }
+}
+
+/// No-op [`IntoBoundedStatic`] impl for `smol_str::SmolStr`.
+#[cfg(feature = "smol_str")]
+impl IntoBoundedStatic for smol_str::SmolStr {
+    type Static = Self;
+
+    fn into_static(self) -> Self::Static {
+        self
+    }
+}
+
 #[cfg(test)]
 mod core_tests {
     use super::*;
@@ -1257,5 +1281,21 @@ mod std_tests {
         let value = std::collections::HashSet::from([(Cow::from(&value))]);
         let to_static = value.to_static();
         ensure_static(to_static);
+    }
+}
+
+#[cfg(feature = "smol_str")]
+#[cfg(test)]
+mod smol_str_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t);
+    }
+
+    #[test]
+    fn test_smol_str() {
+        ensure_static(smol_str::SmolStr::new("smol").to_static());
+        ensure_static(smol_str::SmolStr::new("smol").into_static());
     }
 }
