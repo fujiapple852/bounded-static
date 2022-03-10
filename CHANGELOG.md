@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [bounded-static-0.3.0] & [bounded-static-derive-0.3.0] - 2022-03-10
+
+### Added
+
+- Added support for tuples of up to 12 elements 
+- Added optional support for 3rd party `smartstring::SmartString`
+- Added optional support for 3rd party `smallvec::SmallVec`
+- Added optional support for 3rd party `smol_str::SmolStr`
+- Added `Result` and `array` to the list of documented blanket implementation
+
+### Changed
+
+- Refactored repo and crate directories to `bounded-static` and `bounded-static-derive` to match crate names
+
+### Fixed
+
+- Fixed broken crate and documentation links
+
 ## [bounded-static-0.2.1] & [bounded-static-derive-0.2.1] - 2022-02-22
 
 ### Fixed
@@ -56,6 +74,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Initial release of `bounded-static` and `bounded-static-derive`
+
+[bounded-static-0.3.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.1...bounded-static-0.3.0
+[bounded-static-derive-0.3.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.1...bounded-static-derive-0.3.0
 
 [bounded-static-0.2.1]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.0...bounded-static-0.2.1
 [bounded-static-derive-0.2.1]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.0...bounded-static-derive-0.2.1
