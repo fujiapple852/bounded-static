@@ -55,6 +55,7 @@
 //! Additional implementations for 3rd party types are available by enabling the following features:
 //!
 //! - `smol_str` for [`SmolStr`](https://docs.rs/smol_str/0.1.21/smol_str/struct.SmolStr.html)
+//! - `smallvec` for [`SmallVec`](https://docs.rs/smallvec/1.8.0/smallvec/struct.SmallVec.html)
 //!
 //! # Examples
 //!
@@ -733,6 +734,34 @@ impl IntoBoundedStatic for smol_str::SmolStr {
     }
 }
 
+/// [`ToBoundedStatic`] impl for `smallvec::SmallVec`.
+#[cfg(feature = "smallvec")]
+impl<A> ToBoundedStatic for smallvec::SmallVec<A>
+where
+    A: smallvec::Array + 'static,
+    A::Item: Clone,
+{
+    type Static = Self;
+
+    fn to_static(&self) -> Self::Static {
+        self.clone()
+    }
+}
+
+/// No-op [`IntoBoundedStatic`] impl for `smallvec::SmallVec`.
+#[cfg(feature = "smallvec")]
+impl<A> IntoBoundedStatic for smallvec::SmallVec<A>
+where
+    A: smallvec::Array + 'static,
+    A::Item: Clone,
+{
+    type Static = Self;
+
+    fn into_static(self) -> Self::Static {
+        self
+    }
+}
+
 #[cfg(test)]
 mod core_tests {
     use super::*;
@@ -1297,5 +1326,30 @@ mod smol_str_tests {
     fn test_smol_str() {
         ensure_static(smol_str::SmolStr::new("smol").to_static());
         ensure_static(smol_str::SmolStr::new("smol").into_static());
+    }
+}
+
+#[cfg(feature = "smallvec")]
+#[cfg(test)]
+mod smallvec_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t);
+    }
+
+    #[test]
+    fn test_smallvec1() {
+        let vec: smallvec::SmallVec<[usize; 0]> = smallvec::SmallVec::new();
+        ensure_static(vec.to_static());
+        ensure_static(vec.into_static());
+    }
+
+    #[test]
+    fn test_smallvec2() {
+        let buf = [1, 2, 3, 4, 5];
+        let small_vec: smallvec::SmallVec<_> = smallvec::SmallVec::from_buf(buf);
+        ensure_static(small_vec.to_static());
+        ensure_static(small_vec.into_static());
     }
 }
