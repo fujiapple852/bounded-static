@@ -153,6 +153,11 @@
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
+use core::num::{
+    NonZeroI128, NonZeroI16, NonZeroI32, NonZeroI64, NonZeroI8, NonZeroIsize, NonZeroU128,
+    NonZeroU16, NonZeroU32, NonZeroU64, NonZeroU8, NonZeroUsize,
+};
+
 #[cfg(feature = "alloc")]
 use alloc::{
     borrow::{Cow, ToOwned},
@@ -248,6 +253,18 @@ make_primitive_impl!(i16);
 make_primitive_impl!(i32);
 make_primitive_impl!(i64);
 make_primitive_impl!(i128);
+make_primitive_impl!(NonZeroUsize);
+make_primitive_impl!(NonZeroU8);
+make_primitive_impl!(NonZeroU16);
+make_primitive_impl!(NonZeroU32);
+make_primitive_impl!(NonZeroU64);
+make_primitive_impl!(NonZeroU128);
+make_primitive_impl!(NonZeroIsize);
+make_primitive_impl!(NonZeroI8);
+make_primitive_impl!(NonZeroI16);
+make_primitive_impl!(NonZeroI32);
+make_primitive_impl!(NonZeroI64);
+make_primitive_impl!(NonZeroI128);
 
 /// No-op [`ToBoundedStatic`] impl for unit type `()`.
 impl ToBoundedStatic for () {
@@ -875,6 +892,66 @@ mod core_tests {
     #[test]
     fn test_i128() {
         ensure_static(0i128.to_static());
+    }
+
+    #[test]
+    fn test_non_zero_usize() {
+        ensure_static(NonZeroUsize::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_u8() {
+        ensure_static(NonZeroU8::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_u16() {
+        ensure_static(NonZeroU16::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_u32() {
+        ensure_static(NonZeroU32::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_u64() {
+        ensure_static(NonZeroU64::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_u128() {
+        ensure_static(NonZeroU128::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_isize() {
+        ensure_static(NonZeroIsize::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_i8() {
+        ensure_static(NonZeroI8::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_i16() {
+        ensure_static(NonZeroI16::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_i32() {
+        ensure_static(NonZeroI32::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_i64() {
+        ensure_static(NonZeroI64::new(1).unwrap().to_static());
+    }
+
+    #[test]
+    fn test_non_zero_i128() {
+        ensure_static(NonZeroI128::new(1).unwrap().to_static());
     }
 
     #[test]
