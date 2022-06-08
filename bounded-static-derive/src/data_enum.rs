@@ -89,7 +89,7 @@ fn generate_variant_unit(name: &Ident, variant: &Ident) -> TokenStream {
     quote!(#name::#variant => #name::#variant)
 }
 
-/// Generate match arm for a nnamed variant.
+/// Generate match arm for a named variant.
 ///
 /// i.e. `Foo::Bar { a, b } => Foo::Bar { a: a.to_static(), b: b.to_static() }`
 fn generate_variant_named(
