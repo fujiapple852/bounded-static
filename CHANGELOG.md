@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [bounded-static-0.4.0] & [bounded-static-derive-0.4.0] - 2022-06-08
+
+### Added
+
+- Add support for non-zero integer types (by [@jakoschiko](https://github.com/jakoschiko))
+
 ## [bounded-static-0.3.0] & [bounded-static-derive-0.3.0] - 2022-03-10
 
 ### Added
@@ -74,6 +80,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Initial release of `bounded-static` and `bounded-static-derive`
+
+[bounded-static-0.4.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.3.0...bounded-static-0.4.0
+[bounded-static-derive-0.4.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.3.0...bounded-static-derive-0.4.0
 
 [bounded-static-0.3.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.1...bounded-static-0.3.0
 [bounded-static-derive-0.3.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.1...bounded-static-derive-0.3.0
