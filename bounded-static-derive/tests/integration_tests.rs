@@ -244,12 +244,12 @@ fn test_enum_into() {
 
 #[test]
 fn test_thread_spawn() {
-    #[derive(Debug, PartialEq, ToStatic)]
+    #[derive(Debug, Eq, PartialEq, ToStatic)]
     struct Foo<'a> {
         foo: Cow<'a, str>,
         bar: Vec<Bar<'a>>,
     }
-    #[derive(Debug, PartialEq, ToStatic)]
+    #[derive(Debug, Eq, PartialEq, ToStatic)]
     enum Bar<'a> {
         First,
         Second(Cow<'a, str>),
