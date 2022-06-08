@@ -15,15 +15,15 @@ pub(super) enum TargetTrait {
 impl TargetTrait {
     pub fn method(self) -> Ident {
         match self {
-            TargetTrait::ToBoundedStatic => format_ident!("to_static"),
-            TargetTrait::IntoBoundedStatic => format_ident!("into_static"),
+            Self::ToBoundedStatic => format_ident!("to_static"),
+            Self::IntoBoundedStatic => format_ident!("into_static"),
         }
     }
 
     pub fn bound(self) -> Ident {
         match self {
-            TargetTrait::ToBoundedStatic => format_ident!("ToBoundedStatic"),
-            TargetTrait::IntoBoundedStatic => format_ident!("IntoBoundedStatic"),
+            Self::ToBoundedStatic => format_ident!("ToBoundedStatic"),
+            Self::IntoBoundedStatic => format_ident!("IntoBoundedStatic"),
         }
     }
 }
