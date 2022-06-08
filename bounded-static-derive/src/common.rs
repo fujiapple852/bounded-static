@@ -32,7 +32,7 @@ impl TargetTrait {
 ///
 /// # Examples
 ///
-/// The following `struct` cannot be made static _for all_ lifetimes `'a` (it is only valud for the `'static` lifetime)
+/// The following `struct` cannot be made static _for all_ lifetimes `'a` (it is only valid for the `'static` lifetime)
 /// and so will fail this check:
 ///
 /// ```compile_fail
@@ -107,7 +107,7 @@ pub(super) fn make_target_generics(generics: &Generics) -> Vec<TokenStream> {
 ///  }
 /// ```
 ///
-/// We wish to produce (for example for `ToBoundedStatic`, similar for `ItoBoundedStatic`):
+/// We wish to produce (for example for `ToBoundedStatic`, similar for `IntoBoundedStatic`):
 ///
 /// ```rust
 /// # use std::borrow::Cow;
