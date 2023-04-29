@@ -1,4 +1,4 @@
-#![doc(html_root_url = "https://docs.rs/bounded-static/0.4.0")]
+#![doc(html_root_url = "https://docs.rs/bounded-static/0.5.0")]
 //! Provides the [`ToBoundedStatic`] and [`IntoBoundedStatic`] traits and [ToStatic] derive macro.
 //!
 //! As described in the [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#2-if-t-static-then-t-must-be-valid-for-the-entire-program):
@@ -113,7 +113,7 @@
 //! To use the [`ToStatic`] macro you must enable the `derive` feature:
 //!
 //! ```yaml
-//! bounded-static = { version = "0.4.0", features = [ "derive" ] }
+//! bounded-static = { version = "0.5.0", features = [ "derive" ] }
 //! ```
 //!
 //! # Examples
