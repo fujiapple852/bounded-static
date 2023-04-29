@@ -1051,28 +1051,28 @@ mod alloc_tests {
 
     #[test]
     fn test_string() {
-        let s = String::from("");
+        let s = String::new();
         let to_static = s.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_cow_borrowed_str() {
-        let s = String::from("");
+        let s = String::new();
         let to_static = Cow::from(&s).to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_cow_owned_string() {
-        let s = String::from("");
+        let s = String::new();
         let to_static = Cow::from(s).to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_cow_to_static() {
-        let s = String::from("");
+        let s = String::new();
         let s_cow: Cow<'_, str> = Cow::Borrowed(&s);
         let s1_cow_owned: Cow<'_, str> = s_cow.to_static();
         let s2_cow_owned: Cow<'_, str> = Cow::Owned(s_cow.into_owned());
@@ -1081,7 +1081,7 @@ mod alloc_tests {
 
     #[test]
     fn test_cow_into_static() {
-        let s = String::from("");
+        let s = String::new();
         let s_cow: Cow<'_, str> = Cow::Borrowed(&s);
         let s1_cow_owned: Cow<'_, str> = s_cow.clone().into_static();
         let s2_cow_owned: Cow<'_, str> = Cow::Owned(s_cow.into_owned());
@@ -1097,7 +1097,7 @@ mod alloc_tests {
 
     #[test]
     fn test_option_some() {
-        let s = String::from("");
+        let s = String::new();
         let value = Some(Cow::from(&s));
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1111,14 +1111,14 @@ mod alloc_tests {
 
     #[test]
     fn test_array_into() {
-        let s = String::from("");
+        let s = String::new();
         let arr = [Cow::from(&s)];
         ensure_static(arr.into_static());
     }
 
     #[test]
     fn test_vec1() {
-        let s = String::from("");
+        let s = String::new();
         let value = alloc::vec![Cow::from(&s)];
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1126,7 +1126,7 @@ mod alloc_tests {
 
     #[test]
     fn test_vec2() {
-        let s = String::from("");
+        let s = String::new();
         let value = alloc::vec![Cow::from(&s), Cow::from(s.as_str())];
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1134,7 +1134,7 @@ mod alloc_tests {
 
     #[test]
     fn test_box() {
-        let s = String::from("");
+        let s = String::new();
         let value = Box::new(s);
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1142,7 +1142,7 @@ mod alloc_tests {
 
     #[test]
     fn test_box_cow() {
-        let s = String::from("");
+        let s = String::new();
         let value = Box::new(Cow::from(&s));
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1150,7 +1150,7 @@ mod alloc_tests {
 
     #[test]
     fn test_box_vec_cow() {
-        let s = String::from("");
+        let s = String::new();
         let value = Box::new(alloc::vec![Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1158,7 +1158,7 @@ mod alloc_tests {
 
     #[test]
     fn test_vec_box_cow() {
-        let s = String::from("");
+        let s = String::new();
         let value = alloc::vec![Box::new(Cow::from(&s))];
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1166,7 +1166,7 @@ mod alloc_tests {
 
     #[test]
     fn test_cow_box() {
-        let s = String::from("");
+        let s = String::new();
         let boxed = Box::new(s);
         let value = Cow::Borrowed(&boxed);
         let to_static = value.to_static();
@@ -1205,7 +1205,7 @@ mod alloc_tests {
                 }
             }
         }
-        let s = String::from("");
+        let s = String::new();
         let foo = Foo { foo: Cow::from(&s) };
         let value = Cow::Borrowed(&foo);
         // TODO need to `into_owned()` here
@@ -1215,7 +1215,7 @@ mod alloc_tests {
 
     #[test]
     fn test_cow_cow() {
-        let s = String::from("");
+        let s = String::new();
         let value1: Cow<'_, str> = Cow::Borrowed(&s);
         let value2: Cow<'_, Cow<'_, str>> = Cow::Borrowed(&value1);
         // TODO need to `into_owned()` here
@@ -1237,7 +1237,7 @@ mod alloc_tests {
                 }
             }
         }
-        let s = String::from("");
+        let s = String::new();
         let foo = Foo { foo: Cow::from(&s) };
         let to_static = foo.to_static();
         ensure_static(to_static);
@@ -1257,7 +1257,7 @@ mod alloc_tests {
                 }
             }
         }
-        let s = String::from("");
+        let s = String::new();
         let foo = Foo { foo: Cow::from(s) };
         let to_static = foo.to_static();
         ensure_static(to_static);
@@ -1280,7 +1280,7 @@ mod alloc_tests {
                 }
             }
         }
-        let s = String::from("");
+        let s = String::new();
         let foo = Foo {
             bar: Cow::from(&s),
             baz: alloc::vec![Cow::from(&s)],
@@ -1309,7 +1309,7 @@ mod alloc_tests {
                 }
             }
         }
-        let s = String::from("");
+        let s = String::new();
         let foo = Foo {
             prim: 0,
             borrowed_str: "",
@@ -1332,7 +1332,7 @@ mod collections_tests {
 
     #[test]
     fn test_binary_heap() {
-        let s = String::from("");
+        let s = String::new();
         let value = BinaryHeap::from([Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1349,7 +1349,7 @@ mod collections_tests {
 
     #[test]
     fn test_btree_set() {
-        let s = String::from("");
+        let s = String::new();
         let value = BTreeSet::from([Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1357,7 +1357,7 @@ mod collections_tests {
 
     #[test]
     fn test_linked_list() {
-        let s = String::from("");
+        let s = String::new();
         let value = LinkedList::from([Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1365,7 +1365,7 @@ mod collections_tests {
 
     #[test]
     fn test_vec_deque() {
-        let s = String::from("");
+        let s = String::new();
         let value = VecDeque::from([Cow::from(&s)]);
         let to_static = value.to_static();
         ensure_static(to_static);
