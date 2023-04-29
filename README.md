@@ -3,7 +3,7 @@
 [![Crate](https://img.shields.io/crates/v/bounded-static.svg)](https://crates.io/crates/bounded-static/0.4.0)
 
 # Bounded Static
-An experimental crate that defines the [`ToBoundedStatic`](https://docs.rs/bounded-static/0.4.0/bounded_static/trait.ToBoundedStatic.html) 
+This crate defines the [`ToBoundedStatic`](https://docs.rs/bounded-static/0.4.0/bounded_static/trait.ToBoundedStatic.html) 
 and [`IntoBoundedStatic`](https://docs.rs/bounded-static/0.4.0/bounded_static/trait.IntoBoundedStatic.html) traits, 
 the [`ToStatic`](https://docs.rs/bounded-static/0.4.0/bounded_static/derive.ToStatic.html) macro and provides impls 
 for common types.  This crate has zero-dependencies, is `no_std` friendly and 
@@ -22,10 +22,6 @@ The macros `ToStatic` can be used to automatically derive `ToBoundedStatic` and 
 or `enum` that can be converted to a form that is bounded by `'static`.
 
 Refer to the crate [`documentation`](https://docs.rs/bounded-static/0.4.0/bounded_static) for details and examples.
-
-## Status
-
-Experimental
 
 ## FAQ
 
