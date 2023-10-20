@@ -54,7 +54,7 @@
 //!
 //! Additional implementations for 3rd party types are available by enabling the following features:
 //!
-//! - `smol_str` for [`SmolStr`](https://docs.rs/smol_str/0.1.21/smol_str/struct.SmolStr.html)
+//! - `smol_str` for [`SmolStr`](https://docs.rs/smol_str/0.2.0/smol_str/struct.SmolStr.html)
 //! - `smallvec` for [`SmallVec`](https://docs.rs/smallvec/1.8.0/smallvec/struct.SmallVec.html)
 //! - `smartstring` for [`SmartString`](https://docs.rs/smartstring/1.0.0/smartstring/index.html)
 //!
