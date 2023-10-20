@@ -49,6 +49,7 @@
 //! - `std` for additional types from `std`:
 //!   - [HashMap](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
 //!   - [HashSet](https://doc.rust-lang.org/std/collections/struct.HashSet.html)
+//!   - [RandomState](https://doc.rust-lang.org/std/collections/hash_map/struct.RandomState.html)
 //!
 //! Note that `collections`, `alloc` and `std` are enabled be default.
 //!
@@ -57,6 +58,10 @@
 //! - `smol_str` for [`SmolStr`](https://docs.rs/smol_str/0.2.0/smol_str/struct.SmolStr.html)
 //! - `smallvec` for [`SmallVec`](https://docs.rs/smallvec/1.8.0/smallvec/struct.SmallVec.html)
 //! - `smartstring` for [`SmartString`](https://docs.rs/smartstring/1.0.0/smartstring/index.html)
+//! - `ahash` for:
+//!     - [`RandomState`](https://docs.rs/ahash/0.8.3/ahash/random_state/struct.RandomState.html)
+//!     - [`AHashMap`](https://docs.rs/ahash/0.8.3/ahash/struct.AHashMap.html)
+//!     - [`AHashSet`](https://docs.rs/ahash/0.8.3/ahash/struct.AHashSet.html)
 //!
 //! # Examples
 //!
