@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [bounded-static-0.6.0] & [bounded-static-derive-0.6.0] - 2023-10-20
+
+### Added
+
+- Added support for custom `RandomState` and `aHash` (by [@zhu-he](https://github.com/zhu-he))
+
+This change ([#62](https://github.com/fujiapple852/bounded-static/pull/62)) adds support for using a
+custom `RandomState` with the stdlib `HashMap` and `HashSet` types.
+
+It also adds support for the 3rd party `AHashMap`, `AHashSet` and `RandomState` types from the `ahash` crate via
+the `ahash` feature flag.
+
 ## [bounded-static-0.5.0] & [bounded-static-derive-0.5.0] - 2023-04-29
 
 ### Changed
@@ -15,13 +27,13 @@ Increased MSRV to `1.60` and updated all dependency versions
 
 ### Added
 
-- Add support for non-zero integer types (by [@jakoschiko](https://github.com/jakoschiko))
+- Added support for non-zero integer types (by [@jakoschiko](https://github.com/jakoschiko))
 
 ## [bounded-static-0.3.0] & [bounded-static-derive-0.3.0] - 2022-03-10
 
 ### Added
 
-- Added support for tuples of up to 12 elements 
+- Added support for tuples of up to 12 elements
 - Added optional support for 3rd party `smartstring::SmartString`
 - Added optional support for 3rd party `smallvec::SmallVec`
 - Added optional support for 3rd party `smol_str::SmolStr`
@@ -72,7 +84,7 @@ Increased MSRV to `1.60` and updated all dependency versions
 > }
 > ```
 
-- Added `ToBoundedStatic` and `IntoBoundedStatic` implementations for the `()` (unit) type 
+- Added `ToBoundedStatic` and `IntoBoundedStatic` implementations for the `()` (unit) type
 - Added `ToBoundedStatic` and `IntoBoundedStatic` implementations for the `Result<T, E>` type
 - Added doc comments for `ToBoundedStatic` and `IntoBoundedStatic` impls for all primitive types
 
@@ -87,20 +99,30 @@ Increased MSRV to `1.60` and updated all dependency versions
 
 - Initial release of `bounded-static` and `bounded-static-derive`
 
+[bounded-static-0.6.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.5.0...bounded-static-0.6.0
+
+[bounded-static-derive-0.6.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.5.0...bounded-static-derive-0.6.0
+
 [bounded-static-0.5.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.4.0...bounded-static-0.5.0
+
 [bounded-static-derive-0.5.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.4.0...bounded-static-derive-0.5.0
 
 [bounded-static-0.4.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.3.0...bounded-static-0.4.0
+
 [bounded-static-derive-0.4.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.3.0...bounded-static-derive-0.4.0
 
 [bounded-static-0.3.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.1...bounded-static-0.3.0
+
 [bounded-static-derive-0.3.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.1...bounded-static-derive-0.3.0
 
 [bounded-static-0.2.1]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.0...bounded-static-0.2.1
+
 [bounded-static-derive-0.2.1]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.2.0...bounded-static-derive-0.2.1
 
 [bounded-static-0.2.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.1.0...bounded-static-0.2.0
+
 [bounded-static-derive-0.2.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.1.0...bounded-static-derive-0.2.0
 
 [bounded-static-0.1.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.0.0...bounded-static-0.1.0
+
 [bounded-static-derive-0.1.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.0.0...bounded-static-derive-0.1.0
