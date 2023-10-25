@@ -1,6 +1,6 @@
 [package]
 name = "bounded-static-derive"
-version = "0.6.0"
+version = "0.7.0"
 rust-version = "1.61.0"
 edition = "2021"
 authors = ["FujiApple <fujiapple852@gmail.com>"]
@@ -20,4 +20,4 @@ quote = "1.0.33"
 proc-macro2 = "1.0.69"
 
 [dev-dependencies]
-bounded-static = { version = "0.6.0", path = "../bounded-static", features = [ "derive" ] }
+bounded-static = { version = "0.7.0", path = "../bounded-static", features = [ "derive" ] }
