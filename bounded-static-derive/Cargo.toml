@@ -15,9 +15,9 @@ categories = ["no-std", "rust-patterns", "data-structures", "memory-management"]
 proc-macro = true
 
 [dependencies]
-syn = { version = "2.0.15", features = [ "full" ] }
-quote = "1.0.15"
-proc-macro2 = "1.0.36"
+syn = { version = "2.0.38", features = [ "full" ] }
+quote = "1.0.33"
+proc-macro2 = "1.0.69"
 
 [dev-dependencies]
 bounded-static = { version = "0.6.0", path = "../bounded-static", features = [ "derive" ] }
