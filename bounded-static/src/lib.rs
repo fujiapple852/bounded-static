@@ -59,9 +59,9 @@
 //! - `smallvec` for [`SmallVec`](https://docs.rs/smallvec/1.11.1/smallvec/struct.SmallVec.html)
 //! - `smartstring` for [`SmartString`](https://docs.rs/smartstring/1.0.1/smartstring/index.html)
 //! - `ahash` for:
-//!     - [`RandomState`](https://docs.rs/ahash/0.8.3/ahash/random_state/struct.RandomState.html)
-//!     - [`AHashMap`](https://docs.rs/ahash/0.8.3/ahash/struct.AHashMap.html)
-//!     - [`AHashSet`](https://docs.rs/ahash/0.8.3/ahash/struct.AHashSet.html)
+//!     - [`RandomState`](https://docs.rs/ahash/0.8.6/ahash/random_state/struct.RandomState.html)
+//!     - [`AHashMap`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashMap.html)
+//!     - [`AHashSet`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashSet.html)
 //!
 //! # Examples
 //!
