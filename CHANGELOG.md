@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [bounded-static-0.7.0] & [bounded-static-derive-0.7.0] - 2023-10-25
+
+### Changed
+
+- Increased MSRV to `1.61`
+
 ## [bounded-static-0.6.0] & [bounded-static-derive-0.6.0] - 2023-10-20
 
 ### Added
@@ -98,6 +104,10 @@ Increased MSRV to `1.60` and updated all dependency versions
 ### Added
 
 - Initial release of `bounded-static` and `bounded-static-derive`
+
+[bounded-static-0.7.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.6.0...bounded-static-0.7.0
+
+[bounded-static-derive-0.7.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.6.0...bounded-static-derive-0.7.0
 
 [bounded-static-0.6.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.5.0...bounded-static-0.6.0
 
