@@ -96,10 +96,22 @@
 //! }
 //! ```
 //!
-//! This allows is to convert to an owned representation such that it is now bounded by `'static`:
+//! This allows it to be converted to an owned representation such that it is now bounded by `'static`:
 //!
 //! ```rust
-//! #[test]
+//! # use std::borrow::Cow;
+//! # use bounded_static::ToBoundedStatic;
+//! # struct Foo<'a> {
+//! #     bar: Cow<'a, str>,
+//! #     baz: Vec<Cow<'a, str>>,
+//! # }
+//! # impl ToBoundedStatic for Foo<'_> {
+//! #     type Static = Foo<'static>;
+//! #
+//! #     fn to_static(&self) -> Self::Static {
+//! #         Foo { bar: self.bar.to_static(), baz: self.baz.to_static() }
+//! #     }
+//! # }
 //! fn test() {
 //!     # fn ensure_static<T: 'static>(_: T) {}
 //!     let s = String::from("data");
