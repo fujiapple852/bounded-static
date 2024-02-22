@@ -176,12 +176,7 @@ use core::num::{
 };
 
 #[cfg(feature = "alloc")]
-use alloc::{
-    borrow::{Cow, ToOwned},
-    boxed::Box,
-    string::String,
-    vec::Vec,
-};
+use alloc::borrow::Cow;
 
 #[cfg(feature = "collections")]
 use alloc::collections::{BTreeMap, BTreeSet, BinaryHeap, LinkedList, VecDeque};
