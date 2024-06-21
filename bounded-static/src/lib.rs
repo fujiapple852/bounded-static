@@ -62,6 +62,21 @@
 //!     - [`RandomState`](https://docs.rs/ahash/0.8.6/ahash/random_state/struct.RandomState.html)
 //!     - [`AHashMap`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashMap.html)
 //!     - [`AHashSet`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashSet.html)
+//! - `chrono` for:
+//!     - [`DateTime`](https://docs.rs/chrono/0.4.38/chrono/struct.DateTime.html)
+//!     - [`FixedOffset`](https://docs.rs/chrono/0.4.38/chrono/struct.FixedOffset.html)
+//!     - [`Months`](https://docs.rs/chrono/0.4.38/chrono/struct.Months.html)
+//!     - [`TimeDelta`](https://docs.rs/chrono/0.4.38/chrono/struct.TimeDelta.html)
+//!     - [`Utc`](https://docs.rs/chrono/0.4.38/chrono/struct.Utc.html)
+//!     - [`Month`](https://docs.rs/chrono/0.4.38/chrono/enum.Month.html)
+//!     - [`Weekday`](https://docs.rs/chrono/0.4.38/chrono/enum.Weekday.html)
+//!     - [`Days`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.Days.html)
+//!     - [`IsoWeek`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.IsoWeek.html)
+//!     - [`NaiveDate`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveDate.html)
+//!     - [`NaiveDateTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveDateTime.html)
+//!     - [`NaiveTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveTime.html)
+//! - `chrono-clock` for:
+//!    - [`Local`](https://docs.rs/chrono/0.4.38/chrono/struct.Local.html)
 //!
 //! # Examples
 //!
@@ -237,7 +252,7 @@ impl IntoBoundedStatic for &'static str {
 
 /// No-op [`ToBoundedStatic`] and [`IntoBoundedStatic`] impls for `Copy` types.
 macro_rules! make_copy_impl {
-    ($id:ident) => {
+    ($id:ty) => {
         /// No-op [`ToBoundedStatic`] impl for this `Copy` type.
         impl ToBoundedStatic for $id {
             type Static = Self;
@@ -951,6 +966,50 @@ where
         set
     }
 }
+
+#[cfg(feature = "chrono")]
+impl<Tz: 'static + chrono::TimeZone> ToBoundedStatic for chrono::DateTime<Tz> {
+    type Static = Self;
+
+    fn to_static(&self) -> Self::Static {
+        self.clone()
+    }
+}
+
+#[cfg(feature = "chrono")]
+impl<Tz: 'static + chrono::TimeZone> IntoBoundedStatic for chrono::DateTime<Tz> {
+    type Static = Self;
+
+    fn into_static(self) -> Self::Static {
+        self
+    }
+}
+
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::FixedOffset);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::Months);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::TimeDelta);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::Utc);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::Month);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::Weekday);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::naive::Days);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::naive::IsoWeek);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::naive::NaiveDate);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::naive::NaiveDateTime);
+#[cfg(feature = "chrono")]
+make_copy_impl!(chrono::naive::NaiveTime);
+#[cfg(feature = "chrono-clock")]
+make_copy_impl!(chrono::Local);
+// No implementation for chrono::NaiveWeek as it's not Copy nor Clone.
 
 #[cfg(test)]
 mod core_tests {
@@ -1686,6 +1745,116 @@ mod ahash_tests {
     fn test_ahash_ahashset() {
         let value = String::from("data");
         let value = ahash::AHashSet::from([(Cow::from(&value))]);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+}
+
+#[cfg(feature = "chrono")]
+#[cfg(test)]
+mod chrono_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t);
+    }
+
+    #[test]
+    fn test_chrono_fixed_offset() {
+        let value = chrono::FixedOffset::east_opt(1).unwrap();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_months() {
+        let value = chrono::Months::new(1);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_time_delta() {
+        let value = chrono::TimeDelta::days(10);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_utc() {
+        let value = chrono::Utc;
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_month() {
+        let value = chrono::Month::January;
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_weekday() {
+        let value = chrono::Weekday::Mon;
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_naive_days() {
+        let value = chrono::naive::Days::new(1);
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_naive_iso_week() {
+        use chrono::Datelike;
+        let value = chrono::naive::NaiveDate::from_ymd_opt(2024, 6, 1)
+            .unwrap()
+            .iso_week();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_naive_date() {
+        let value = chrono::naive::NaiveDate::from_ymd_opt(2024, 6, 1).unwrap();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_naive_date_time() {
+        let value = chrono::naive::NaiveDateTime::new(
+            chrono::NaiveDate::from_ymd_opt(2024, 6, 1).unwrap(),
+            chrono::NaiveTime::from_hms_opt(22, 33, 44).unwrap(),
+        );
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[test]
+    fn test_chrono_naive_time() {
+        let value = chrono::naive::NaiveTime::from_hms_opt(22, 33, 44).unwrap();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+}
+
+#[cfg(feature = "chrono-clock")]
+#[cfg(test)]
+mod chrono_clock_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t);
+    }
+
+    #[test]
+    fn test_chrono_local() {
+        let value = chrono::Local::now();
         let to_static = value.to_static();
         ensure_static(to_static);
     }
