@@ -230,7 +230,7 @@ fn find_predicate<'a>(
         .and_then(|predicate| {
             predicate.iter().find_map(|p| match p {
                 WherePredicate::Type(ty) => match &ty.bounded_ty {
-                    Type::Path(path) => path.path.is_ident(var).then(|| ty),
+                    Type::Path(path) => path.path.is_ident(var).then_some(ty),
                     _ => None,
                 },
                 _ => None,
