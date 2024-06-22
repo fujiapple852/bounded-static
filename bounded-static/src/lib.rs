@@ -240,7 +240,7 @@ macro_rules! make_primitive_impl {
     ($id:ident) => {
         /// No-op [`ToBoundedStatic`] impl for this primitive type.
         impl ToBoundedStatic for $id {
-            type Static = $id;
+            type Static = Self;
 
             fn to_static(&self) -> Self::Static {
                 *self
@@ -248,7 +248,7 @@ macro_rules! make_primitive_impl {
         }
         /// No-op [`IntoBoundedStatic`] impl for this primitive type.
         impl IntoBoundedStatic for $id {
-            type Static = $id;
+            type Static = Self;
 
             fn into_static(self) -> Self::Static {
                 self
