@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [bounded-static-0.8.0] & [bounded-static-derive-0.8.0] - 2024-06-23
+
+### Added
+
+- Added optional support for 3rd party `chrono` crate (by [@xkikeg](https://github.com/xkikeg))
+
+This change ([#46](https://github.com/fujiapple852/bounded-static/pull/46)) adds support for types from
+the `chrono` crate via the `chrono` and `chrono-clock` feature flags.
+
+### Changed
+
+- Increased MSRV to `1.64`
+- Updated `ahash`, `smol_str` and `smallvec` to the latest versions
+
 ## [bounded-static-0.7.0] & [bounded-static-derive-0.7.0] - 2023-10-25
 
 ### Changed
@@ -27,7 +41,7 @@ the `ahash` feature flag.
 
 ### Changed
 
-Increased MSRV to `1.60` and updated all dependency versions
+- Increased MSRV to `1.60` and updated all dependency versions
 
 ## [bounded-static-0.4.0] & [bounded-static-derive-0.4.0] - 2022-06-08
 
@@ -104,6 +118,10 @@ Increased MSRV to `1.60` and updated all dependency versions
 ### Added
 
 - Initial release of `bounded-static` and `bounded-static-derive`
+
+[bounded-static-0.8.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.7.0...bounded-static-0.8.0
+
+[bounded-static-derive-0.8.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.7.0...bounded-static-derive-0.8.0
 
 [bounded-static-0.7.0]: https://github.com/fujiapple852/bounded-static/compare/bounded-static-0.6.0...bounded-static-0.7.0
 
