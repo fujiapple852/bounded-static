@@ -235,10 +235,10 @@ impl IntoBoundedStatic for &'static str {
     }
 }
 
-/// No-op [`ToBoundedStatic`] and [`IntoBoundedStatic`] impls for primitive types.
-macro_rules! make_primitive_impl {
+/// No-op [`ToBoundedStatic`] and [`IntoBoundedStatic`] impls for `Copy` types.
+macro_rules! make_copy_impl {
     ($id:ident) => {
-        /// No-op [`ToBoundedStatic`] impl for this primitive type.
+        /// No-op [`ToBoundedStatic`] impl for this `Copy` type.
         impl ToBoundedStatic for $id {
             type Static = Self;
 
@@ -246,7 +246,7 @@ macro_rules! make_primitive_impl {
                 *self
             }
         }
-        /// No-op [`IntoBoundedStatic`] impl for this primitive type.
+        /// No-op [`IntoBoundedStatic`] impl for this `Copy` type.
         impl IntoBoundedStatic for $id {
             type Static = Self;
 
@@ -257,34 +257,34 @@ macro_rules! make_primitive_impl {
     };
 }
 
-make_primitive_impl!(bool);
-make_primitive_impl!(char);
-make_primitive_impl!(f32);
-make_primitive_impl!(f64);
-make_primitive_impl!(usize);
-make_primitive_impl!(u8);
-make_primitive_impl!(u16);
-make_primitive_impl!(u32);
-make_primitive_impl!(u64);
-make_primitive_impl!(u128);
-make_primitive_impl!(isize);
-make_primitive_impl!(i8);
-make_primitive_impl!(i16);
-make_primitive_impl!(i32);
-make_primitive_impl!(i64);
-make_primitive_impl!(i128);
-make_primitive_impl!(NonZeroUsize);
-make_primitive_impl!(NonZeroU8);
-make_primitive_impl!(NonZeroU16);
-make_primitive_impl!(NonZeroU32);
-make_primitive_impl!(NonZeroU64);
-make_primitive_impl!(NonZeroU128);
-make_primitive_impl!(NonZeroIsize);
-make_primitive_impl!(NonZeroI8);
-make_primitive_impl!(NonZeroI16);
-make_primitive_impl!(NonZeroI32);
-make_primitive_impl!(NonZeroI64);
-make_primitive_impl!(NonZeroI128);
+make_copy_impl!(bool);
+make_copy_impl!(char);
+make_copy_impl!(f32);
+make_copy_impl!(f64);
+make_copy_impl!(usize);
+make_copy_impl!(u8);
+make_copy_impl!(u16);
+make_copy_impl!(u32);
+make_copy_impl!(u64);
+make_copy_impl!(u128);
+make_copy_impl!(isize);
+make_copy_impl!(i8);
+make_copy_impl!(i16);
+make_copy_impl!(i32);
+make_copy_impl!(i64);
+make_copy_impl!(i128);
+make_copy_impl!(NonZeroUsize);
+make_copy_impl!(NonZeroU8);
+make_copy_impl!(NonZeroU16);
+make_copy_impl!(NonZeroU32);
+make_copy_impl!(NonZeroU64);
+make_copy_impl!(NonZeroU128);
+make_copy_impl!(NonZeroIsize);
+make_copy_impl!(NonZeroI8);
+make_copy_impl!(NonZeroI16);
+make_copy_impl!(NonZeroI32);
+make_copy_impl!(NonZeroI64);
+make_copy_impl!(NonZeroI128);
 
 /// No-op [`ToBoundedStatic`] impl for unit type `()`.
 impl ToBoundedStatic for () {
