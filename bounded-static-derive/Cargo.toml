@@ -1,15 +1,14 @@
 [package]
 name = "bounded-static-derive"
-version = "0.7.0"
-rust-version = "1.64.0"
-edition = "2021"
-authors = ["FujiApple <fujiapple852@gmail.com>"]
 description = "Macro to derive ToBoundedStatic and IntoBoundedStatic traits"
 readme = "README.md"
-repository = "https://github.com/fujiapple852/bounded-static"
-license = "Apache-2.0"
-keywords = ["cow", "static", "bounded", "owned", "derive"]
-categories = ["no-std", "rust-patterns", "data-structures", "memory-management"]
+version.workspace = true
+rust-version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+categories.workspace = true
 
 [lib]
 proc-macro = true
