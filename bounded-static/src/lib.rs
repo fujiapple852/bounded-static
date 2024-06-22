@@ -28,8 +28,8 @@
 //! - [`primitive`](core::primitive) (no-op conversions)
 //! - [`array`](array)
 //! - [`tuple`](tuple)
-//! - [`Option`](core::option::Option)
-//! - [`Result`](core::result::Result)
+//! - [`Option`]
+//! - [`Result`]
 //!
 //! Additional implementations are available by enabling the following features:
 //!
