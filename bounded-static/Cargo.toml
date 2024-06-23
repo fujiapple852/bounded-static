@@ -30,12 +30,12 @@ derive = [ "bounded-static-derive" ]
 chrono-clock = [ "chrono", "chrono/clock" ]
 
 [dependencies]
-bounded-static-derive = { version = "0.7.0", path = "../bounded-static-derive", optional = true }
-smol_str = { version = "0.2.2", optional = true, default-features = false }
-smallvec = { version = "1.13.2", optional = true, default-features = false }
-smartstring = { version = "1.0.1", optional = true, default-features = false }
-ahash = { version = "0.8.11", optional = true, default-features = false }
-chrono = { version = "0.4.38", optional = true, default-features = false }
+bounded-static-derive = { workspace = true, optional = true }
+smol_str = { workspace = true, optional = true, default-features = false }
+smallvec = { workspace = true, optional = true, default-features = false }
+smartstring = { workspace = true, optional = true, default-features = false }
+ahash = { workspace = true, optional = true, default-features = false }
+chrono = { workspace = true, optional = true, default-features = false }
 
 [package.metadata.docs.rs]
 all-features = true

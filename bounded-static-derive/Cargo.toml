@@ -14,9 +14,9 @@ categories.workspace = true
 proc-macro = true
 
 [dependencies]
-syn = { version = "2.0.38", features = [ "full" ] }
-quote = "1.0.33"
-proc-macro2 = "1.0.69"
+syn.workspace = true
+quote.workspace = true
+proc-macro2.workspace = true
 
 [dev-dependencies]
-bounded-static = { version = "0.7.0", path = "../bounded-static", features = [ "derive" ] }
+bounded-static = { workspace = true, features = [ "derive" ] }

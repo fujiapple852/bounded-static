@@ -11,3 +11,15 @@ repository = "https://github.com/fujiapple852/bounded-static"
 license = "Apache-2.0"
 keywords = ["cow", "static", "bounded", "owned", "derive"]
 categories = ["no-std", "rust-patterns", "data-structures", "memory-management"]
+
+[workspace.dependencies]
+bounded-static = { version = "0.7.0", path = "bounded-static" }
+bounded-static-derive = { version = "0.7.0", path = "bounded-static-derive" }
+syn = { version = "2.0.38", features = [ "full" ] }
+quote = "1.0.33"
+proc-macro2 = "1.0.69"
+smol_str = { version = "0.2.2", default-features = false }
+smallvec = { version = "1.13.2", default-features = false }
+smartstring = { version = "1.0.1", default-features = false }
+ahash = { version = "0.8.11", default-features = false }
+chrono = { version = "0.4.38", default-features = false }
