@@ -3,7 +3,7 @@ resolver = "2"
 members = ["bounded-static", "bounded-static-derive"]
 
 [workspace.package]
-version = "0.7.0"
+version = "0.8.0"
 rust-version = "1.64.0"
 edition = "2021"
 authors = ["FujiApple <fujiapple852@gmail.com>"]
@@ -13,8 +13,8 @@ keywords = ["cow", "static", "bounded", "owned", "derive"]
 categories = ["no-std", "rust-patterns", "data-structures", "memory-management"]
 
 [workspace.dependencies]
-bounded-static = { version = "0.7.0", path = "bounded-static" }
-bounded-static-derive = { version = "0.7.0", path = "bounded-static-derive" }
+bounded-static = { version = "0.8.0", path = "bounded-static" }
+bounded-static-derive = { version = "0.8.0", path = "bounded-static-derive" }
 syn = { version = "2.0.38", features = [ "full" ] }
 quote = "1.0.33"
 proc-macro2 = "1.0.69"
