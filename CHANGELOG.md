@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Added optional support for 3rd party `jiff` crate
+
 ### Changed
 
 - Increased MSRV to `1.71`

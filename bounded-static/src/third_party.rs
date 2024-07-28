@@ -11,3 +11,6 @@ mod ahash;
 
 #[cfg(feature = "chrono")]
 mod chrono;
+
+#[cfg(feature = "jiff")]
+mod jiff;
