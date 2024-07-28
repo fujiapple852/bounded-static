@@ -76,6 +76,24 @@
 //!     - [`NaiveTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveTime.html)
 //! - `chrono-clock` for:
 //!    - [`Local`](https://docs.rs/chrono/0.4.38/chrono/struct.Local.html)
+//! - `jiff` for:
+//!     - [`Zoned`](https://docs.rs/jiff/0.2.25/jiff/struct.Zoned.html)
+//!     - [`Timestamp`](https://docs.rs/jiff/0.2.25/jiff/struct.Timestamp.html)
+//!     - [`Span`](https://docs.rs/jiff/0.2.25/jiff/struct.Span.html)
+//!     - [`SpanFieldwise`](https://docs.rs/jiff/0.2.25/jiff/struct.SpanFieldwise.html)
+//!     - [`SignedDuration`](https://docs.rs/jiff/0.2.25/jiff/struct.SignedDuration.html)
+//!     - [`DateTime`](https://docs.rs/jiff/0.2.25/jiff/civil/struct.DateTime.html)
+//!     - [`Date`](https://docs.rs/jiff/0.2.25/jiff/civil/struct.Date.html)
+//!     - [`Time`](https://docs.rs/jiff/0.2.25/jiff/civil/struct.Time.html)
+//!     - [`ISOWeekDate`](https://docs.rs/jiff/0.2.25/jiff/civil/struct.ISOWeekDate.html)
+//!     - [`Era`](https://docs.rs/jiff/0.2.25/jiff/civil/enum.Era.html)
+//!     - [`Weekday`](https://docs.rs/jiff/0.2.25/jiff/civil/enum.Weekday.html)
+//!     - [`TimeZone`](https://docs.rs/jiff/0.2.25/jiff/tz/struct.TimeZone.html)
+//!     - [`Offset`](https://docs.rs/jiff/0.2.25/jiff/tz/struct.Offset.html)
+//!     - [`Dst`](https://docs.rs/jiff/0.2.25/jiff/tz/enum.Dst.html)
+//!     - [`AmbiguousZoned`](https://docs.rs/jiff/0.2.25/jiff/tz/struct.AmbiguousZoned.html)
+//!     - [`AmbiguousTimestamp`](https://docs.rs/jiff/0.2.25/jiff/tz/struct.AmbiguousTimestamp.html)
+//!     - [`AmbiguousOffset`](https://docs.rs/jiff/0.2.25/jiff/tz/enum.AmbiguousOffset.html)
 //!
 //! # Examples
 //!
