@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [stable, beta, 1.64.0]
+        rust: [stable, beta, 1.70.0]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [stable, beta, 1.64.0]
+        rust: [stable, beta, 1.70.0]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [ stable, beta, 1.64.0 ]
+        rust: [ stable, beta, 1.70.0 ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -129,7 +129,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [ stable, beta, 1.64.0 ]
+        rust: [ stable, beta, 1.70.0 ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust: [ stable, beta, 1.64.0 ]
+        rust: [ stable, beta, 1.70.0 ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1

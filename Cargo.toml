@@ -4,7 +4,7 @@ members = ["bounded-static", "bounded-static-derive"]
 
 [workspace.package]
 version = "0.8.0"
-rust-version = "1.64.0"
+rust-version = "1.70.0"
 edition = "2021"
 authors = ["FujiApple <fujiapple852@gmail.com>"]
 repository = "https://github.com/fujiapple852/bounded-static"
