@@ -1024,149 +1024,48 @@ make_copy_impl!(chrono::Local);
 #[cfg(test)]
 mod core_tests {
     use super::*;
+    use test_case::test_case;
 
     fn ensure_static<T: 'static>(t: T) {
         drop(t);
     }
 
-    #[test]
-    fn test_bool() {
-        ensure_static(false.to_static());
+    #[test_case(false; "bool")]
+    #[test_case('a'; "char")]
+    #[test_case(0.0f32; "f32")]
+    #[test_case(0.0f64; "f64")]
+    #[test_case(0usize; "usize")]
+    #[test_case(0u8; "u8")]
+    #[test_case(0u16; "u16")]
+    #[test_case(0u32; "u32")]
+    #[test_case(0u64; "u64")]
+    #[test_case(0u128; "u128")]
+    #[test_case(0isize; "isize")]
+    #[test_case(0i8; "i8")]
+    #[test_case(0i16; "i16")]
+    #[test_case(0i32; "i32")]
+    #[test_case(0i64; "i64")]
+    #[test_case(0i128; "i128")]
+    #[allow(clippy::needless_pass_by_value)]
+    fn test_primitive<T: ToBoundedStatic>(t: T) {
+        ensure_static(t.to_static());
     }
 
-    #[test]
-    fn test_char() {
-        ensure_static('a'.to_static());
-    }
-
-    #[test]
-    fn test_f32() {
-        ensure_static(0.0f32.to_static());
-    }
-
-    #[test]
-    fn test_f64() {
-        ensure_static(0.0f64.to_static());
-    }
-
-    #[test]
-    fn test_usize() {
-        ensure_static(0usize.to_static());
-    }
-
-    #[test]
-    fn test_u8() {
-        ensure_static(0u8.to_static());
-    }
-
-    #[test]
-    fn test_u16() {
-        ensure_static(0u16.to_static());
-    }
-
-    #[test]
-    fn test_u32() {
-        ensure_static(0u32.to_static());
-    }
-
-    #[test]
-    fn test_u64() {
-        ensure_static(0u64.to_static());
-    }
-
-    #[test]
-    fn test_u128() {
-        ensure_static(0u128.to_static());
-    }
-
-    #[test]
-    fn test_isize() {
-        ensure_static(0isize.to_static());
-    }
-
-    #[test]
-    fn test_i8() {
-        ensure_static(0i8.to_static());
-    }
-
-    #[test]
-    fn test_i16() {
-        ensure_static(0i16.to_static());
-    }
-
-    #[test]
-    fn test_i32() {
-        ensure_static(0i32.to_static());
-    }
-
-    #[test]
-    fn test_i64() {
-        ensure_static(0i64.to_static());
-    }
-
-    #[test]
-    fn test_i128() {
-        ensure_static(0i128.to_static());
-    }
-
-    #[test]
-    fn test_non_zero_usize() {
-        ensure_static(NonZeroUsize::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_u8() {
-        ensure_static(NonZeroU8::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_u16() {
-        ensure_static(NonZeroU16::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_u32() {
-        ensure_static(NonZeroU32::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_u64() {
-        ensure_static(NonZeroU64::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_u128() {
-        ensure_static(NonZeroU128::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_isize() {
-        ensure_static(NonZeroIsize::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_i8() {
-        ensure_static(NonZeroI8::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_i16() {
-        ensure_static(NonZeroI16::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_i32() {
-        ensure_static(NonZeroI32::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_i64() {
-        ensure_static(NonZeroI64::new(1).unwrap().to_static());
-    }
-
-    #[test]
-    fn test_non_zero_i128() {
-        ensure_static(NonZeroI128::new(1).unwrap().to_static());
+    #[test_case(NonZeroUsize::new(1); "usize")]
+    #[test_case(NonZeroU8::new(1); "u8")]
+    #[test_case(NonZeroU16::new(1); "u16")]
+    #[test_case(NonZeroU32::new(1); "u32")]
+    #[test_case(NonZeroU64::new(1); "u64")]
+    #[test_case(NonZeroU128::new(1); "u128")]
+    #[test_case(NonZeroIsize::new(1); "isize")]
+    #[test_case(NonZeroI8::new(1); "i8")]
+    #[test_case(NonZeroI16::new(1); "i16")]
+    #[test_case(NonZeroI32::new(1); "i32")]
+    #[test_case(NonZeroI64::new(1); "i64")]
+    #[test_case(NonZeroI128::new(1); "i128")]
+    #[allow(clippy::needless_pass_by_value)]
+    fn test_non_zero<T: ToBoundedStatic>(t: T) {
+        ensure_static(t.to_static());
     }
 
     #[test]

@@ -37,5 +37,8 @@ smartstring = { workspace = true, optional = true, default-features = false }
 ahash = { workspace = true, optional = true, default-features = false }
 chrono = { workspace = true, optional = true, default-features = false }
 
+[dev-dependencies]
+test-case.workspace = true
+
 [package.metadata.docs.rs]
 all-features = true
