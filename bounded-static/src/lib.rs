@@ -77,6 +77,12 @@
 //!     - [`NaiveTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveTime.html)
 //! - `chrono-clock` for:
 //!    - [`Local`](https://docs.rs/chrono/0.4.38/chrono/struct.Local.html)
+//! - `jiff` for:
+//!     - [`Zoned`](https://docs.rs/jiff/0.1.14/jiff/struct.Zoned.html)
+//!     - [`Timestamp`](https://docs.rs/jiff/0.1.14/jiff/struct.Timestamp.html)
+//!     - [`DateTime`](https://docs.rs/jiff/0.1.14/jiff/civil/struct.DateTime.html)
+//!     - [`Date`](https://docs.rs/jiff/0.1.14/jiff/civil/struct.Date.html)
+//!     - [`Time`](https://docs.rs/jiff/0.1.14/jiff/civil/struct.Time.html)
 //!
 //! # Examples
 //!
@@ -1024,6 +1030,38 @@ make_copy_impl!(chrono::naive::NaiveTime);
 make_copy_impl!(chrono::Local);
 // No implementation for chrono::NaiveWeek as it's not Copy nor Clone.
 
+#[cfg(feature = "jiff")]
+/// [`ToBoundedStatic`] impl for `jiff::Zoned`.
+impl ToBoundedStatic for jiff::Zoned {
+    type Static = Self;
+
+    fn to_static(&self) -> Self::Static {
+        self.clone()
+    }
+}
+
+#[cfg(feature = "jiff")]
+/// No-op [`IntoBoundedStatic`] impl for `jiff::Zoned`.
+impl IntoBoundedStatic for jiff::Zoned {
+    type Static = Self;
+
+    fn into_static(self) -> Self::Static {
+        self
+    }
+}
+
+#[cfg(feature = "jiff")]
+make_copy_impl!(jiff::Timestamp);
+
+#[cfg(feature = "jiff")]
+make_copy_impl!(jiff::civil::DateTime);
+
+#[cfg(feature = "jiff")]
+make_copy_impl!(jiff::civil::Date);
+
+#[cfg(feature = "jiff")]
+make_copy_impl!(jiff::civil::Time);
+
 #[cfg(test)]
 mod core_tests {
     use super::*;
@@ -1839,6 +1877,56 @@ mod chrono_clock_tests {
     #[test]
     fn test_chrono_local() {
         let value = chrono::Local::now();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+}
+
+#[cfg(feature = "jiff")]
+#[cfg(test)]
+mod jiff_tests {
+    use super::*;
+
+    fn ensure_static<T: 'static>(t: T) {
+        drop(t);
+    }
+
+    #[cfg(feature = "std")]
+    #[test]
+    fn test_jiff_zoned() {
+        let value = jiff::Zoned::now();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[cfg(feature = "std")]
+    #[test]
+    fn test_jiff_timestamp() {
+        let value = jiff::Timestamp::now();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[cfg(feature = "std")]
+    #[test]
+    fn test_jiff_civil_datetime() {
+        let value = jiff::civil::DateTime::default();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[cfg(feature = "std")]
+    #[test]
+    fn test_jiff_civil_date() {
+        let value = jiff::civil::Date::default();
+        let to_static = value.to_static();
+        ensure_static(to_static);
+    }
+
+    #[cfg(feature = "std")]
+    #[test]
+    fn test_jiff_civil_time() {
+        let value = jiff::civil::Time::default();
         let to_static = value.to_static();
         ensure_static(to_static);
     }
