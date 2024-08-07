@@ -374,13 +374,12 @@ where
 /// Blanket [`ToBoundedStatic`] impl for converting `[T; const N: usize]` to `[T; const N: usize]: 'static`.
 impl<T, const N: usize> ToBoundedStatic for [T; N]
 where
-    T: ToBoundedStatic + Copy,
+    T: ToBoundedStatic,
 {
     type Static = [T::Static; N];
 
     fn to_static(&self) -> Self::Static {
-        // Note that we required that `T` is `Copy` here whereas the `IntoBoundedStatic` impl does does not.
-        self.map(|item| item.to_static())
+        core::array::from_fn(|i| self[i].to_static())
     }
 }
 
