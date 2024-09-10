@@ -78,15 +78,18 @@ pub(super) fn check_field(field: &Field) {
     };
 }
 
-/// The generic parameters of the `Static` associated type.
+/// The generic parameters of the `Static` associated type for `TargetTrait`.
 ///
-/// i.e. `Static = Foo<'static, 'static, T::Static, R::Static>`
-pub(super) fn make_target_generics(generics: &Generics) -> Vec<TokenStream> {
+/// i.e. `Static = Foo<'static, <T as ToBoundedStatic>::Static>`
+pub(super) fn make_target_generics(generics: &Generics, target: TargetTrait) -> Vec<TokenStream> {
     generics
         .params
         .iter()
         .map(|param| match param {
-            GenericParam::Type(TypeParam { ident, .. }) => quote!(#ident::Static),
+            GenericParam::Type(TypeParam { ident, .. }) => {
+                let target_bound = target.bound();
+                quote!(<#ident as #target_bound>::Static)
+            }
             GenericParam::Lifetime(_) => quote!('static),
             GenericParam::Const(ConstParam { ident, .. }) => quote!(#ident),
         })
@@ -117,9 +120,9 @@ pub(super) fn make_target_generics(generics: &Generics) -> Vec<TokenStream> {
 /// # }
 /// impl<'a, T: Into<String> + 'a + ::bounded_static::ToBoundedStatic> ::bounded_static::ToBoundedStatic for Baz<'a, T>
 /// where
-///     T::Static: Into<String> + 'a {
+///     <T as ::bounded_static::ToBoundedStatic>::Static: Into<String> + 'a {
 ///
-///     type Static = Baz<'static, T::Static>;
+///     type Static = Baz<'static, <T as ::bounded_static::ToBoundedStatic>::Static>;
 ///
 ///     fn to_static(&self) -> Self::Static {
 ///         Baz { t: self.t.to_static(), r: self.r.to_static() }
@@ -131,11 +134,10 @@ pub(super) fn make_target_generics(generics: &Generics) -> Vec<TokenStream> {
 ///
 /// - Generic parameter `T` has the additional bound `::bounded_static::ToBoundedStatic`
 /// - Associated type `T::Static` has the bound of `T`, i.e. `Into<String> + 'a`
-///
 pub(super) fn make_bounded_generics(generics: &Generics, target: TargetTrait) -> Generics {
     let params = make_bounded_generic_params(generics, target);
     let predicates = make_bounded_generic_predicates(generics, target);
-    let static_predicates = make_static_generic_predicates(generics);
+    let static_predicates = make_static_generic_predicates(generics, target);
     let where_items: Vec<_> = predicates.into_iter().chain(static_predicates).collect();
     Generics {
         params: parse_quote!(#(#params),*),
@@ -192,8 +194,8 @@ fn make_bounded_generic_predicates(
 ///
 /// The generated trait impl associated type `Static` must reflect the original generic bounds as well as any
 /// additional bounds from a `where` clause.  For the example above the associated type bound would be
-/// `T::Static: Into<String> + Foo`.
-fn make_static_generic_predicates(generics: &Generics) -> Vec<WherePredicate> {
+/// `<T as ToBoundedStatic>::Static: Into<String> + Foo`.
+fn make_static_generic_predicates(generics: &Generics, target: TargetTrait) -> Vec<WherePredicate> {
     generics
         .params
         .iter()
@@ -201,15 +203,16 @@ fn make_static_generic_predicates(generics: &Generics) -> Vec<WherePredicate> {
             GenericParam::Type(param_ty) => {
                 let var = &param_ty.ident;
                 let param_ty_bounds = &param_ty.bounds;
+                let target_bound = target.bound();
                 match find_predicate(generics.where_clause.as_ref(), var) {
                     None if param_ty_bounds.is_empty() => None,
-                    None => Some(parse_quote!(#var::Static: #param_ty_bounds)),
+                    None => Some(parse_quote!(<#var as #target_bound>::Static: #param_ty_bounds)),
                     Some(predicate_ty) => {
                         let predicate_bounds = &predicate_ty.bounds;
                         if param_ty_bounds.is_empty() {
-                            Some(parse_quote!(#var::Static: #predicate_bounds))
+                            Some(parse_quote!(<#var as #target_bound>::Static: #predicate_bounds))
                         } else {
-                            Some(parse_quote!(#var::Static: #param_ty_bounds + #predicate_bounds))
+                            Some(parse_quote!(<#var as #target_bound>::Static: #param_ty_bounds + #predicate_bounds))
                         }
                     }
                 }

@@ -44,7 +44,7 @@ fn generate_struct_named_to(
     let fields = make_named_fields_init_methods(fields_named, TargetTrait::ToBoundedStatic);
     let gens = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
     let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
-    let static_gens = common::make_target_generics(generics);
+    let static_gens = common::make_target_generics(generics, TargetTrait::ToBoundedStatic);
     quote!(
         impl #impl_gens ::bounded_static::ToBoundedStatic for #name #ty_gens #where_clause {
             type Static = #name<#(#static_gens),*>;
@@ -66,7 +66,7 @@ fn generate_struct_named_into(
     let fields = make_named_fields_init_methods(fields_named, TargetTrait::IntoBoundedStatic);
     let gens = common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
     let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
-    let static_gens = common::make_target_generics(generics);
+    let static_gens = common::make_target_generics(generics, TargetTrait::IntoBoundedStatic);
     quote!(
         impl #impl_gens ::bounded_static::IntoBoundedStatic for #name #ty_gens #where_clause {
             type Static = #name<#(#static_gens),*>;
@@ -88,7 +88,7 @@ fn generate_struct_unnamed_to(
     let fields = make_unnamed_fields(fields_unnamed, TargetTrait::ToBoundedStatic);
     let gens = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
     let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
-    let static_gens = common::make_target_generics(generics);
+    let static_gens = common::make_target_generics(generics, TargetTrait::ToBoundedStatic);
     quote!(
         impl #impl_gens ::bounded_static::ToBoundedStatic for #name #ty_gens #where_clause {
             type Static = #name<#(#static_gens),*>;
@@ -110,7 +110,7 @@ fn generate_struct_unnamed_into(
     let fields = make_unnamed_fields(fields_unnamed, TargetTrait::IntoBoundedStatic);
     let gens = common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
     let (impl_gens, ty_gens, where_clause) = gens.split_for_impl();
-    let static_gens = common::make_target_generics(generics);
+    let static_gens = common::make_target_generics(generics, TargetTrait::IntoBoundedStatic);
     quote!(
         impl #impl_gens ::bounded_static::IntoBoundedStatic for #name #ty_gens #where_clause {
             type Static = #name<#(#static_gens),*>;
