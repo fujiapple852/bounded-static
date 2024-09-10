@@ -23,7 +23,7 @@ fn generate_enum_to(name: &Ident, generics: &Generics, variants: &[&Variant]) ->
     let arms = generate_match_arms(name, variants, TargetTrait::ToBoundedStatic);
     let gens = common::make_bounded_generics(generics, TargetTrait::ToBoundedStatic);
     let (impl_gens, to_ty_gens, to_where) = gens.split_for_impl();
-    let static_gens = common::make_target_generics(generics);
+    let static_gens = common::make_target_generics(generics, TargetTrait::ToBoundedStatic);
     quote!(
         impl #impl_gens ::bounded_static::ToBoundedStatic for #name #to_ty_gens #to_where {
             type Static = #name<#(#static_gens),*>;
@@ -41,7 +41,7 @@ fn generate_enum_into(name: &Ident, generics: &Generics, variants: &[&Variant]) 
     let arms = generate_match_arms(name, variants, TargetTrait::IntoBoundedStatic);
     let gens = common::make_bounded_generics(generics, TargetTrait::IntoBoundedStatic);
     let (impl_gens, into_ty_gens, into_where) = gens.split_for_impl();
-    let static_gens = common::make_target_generics(generics);
+    let static_gens = common::make_target_generics(generics, TargetTrait::IntoBoundedStatic);
     quote!(
         impl #impl_gens ::bounded_static::IntoBoundedStatic for #name #into_ty_gens #into_where {
             type Static = #name<#(#static_gens),*>;
