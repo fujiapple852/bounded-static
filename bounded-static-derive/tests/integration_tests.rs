@@ -382,6 +382,43 @@ fn test_generic_bound_where_2() {
     ensure_static(data.into_static());
 }
 
+#[test]
+fn test_generic_fully_qualified_named_struct() {
+    #[derive(ToStatic)]
+    struct Foo<T: IntoBoundedStatic + ToBoundedStatic> {
+        value: T,
+    }
+    let value = "test";
+    let owned = Foo { value }.to_static();
+    ensure_static(owned);
+    let owned = Foo { value }.into_static();
+    ensure_static(owned);
+}
+
+#[test]
+fn test_generic_fully_qualified_unnamed_struct() {
+    #[derive(ToStatic)]
+    struct Foo<T: IntoBoundedStatic + ToBoundedStatic>(T);
+    let value = "test";
+    let owned = Foo(value).to_static();
+    ensure_static(owned);
+    let owned = Foo(value).into_static();
+    ensure_static(owned);
+}
+
+#[test]
+fn test_generic_fully_qualified_enum() {
+    #[derive(ToStatic)]
+    enum Foo<T: IntoBoundedStatic + ToBoundedStatic> {
+        First(T),
+    }
+    let value = "test";
+    let owned = Foo::First(value).to_static();
+    ensure_static(owned);
+    let owned = Foo::First(value).into_static();
+    ensure_static(owned);
+}
+
 fn ensure_static<S: 'static>(s: S) {
     drop(s);
 }
