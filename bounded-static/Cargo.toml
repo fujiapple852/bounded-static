@@ -21,13 +21,16 @@ alloc = []
 collections = [ "alloc" ]
 
 # Enable impls of [To|Into]BoundedStatic for other types in std.
-std = [ "alloc", "ahash?/std", "chrono?/std" ]
+std = [ "alloc", "ahash?/std", "chrono?/std", "jiff?/std" ]
 
 # Enable the ToStatic custom derive macro.
 derive = [ "bounded-static-derive" ]
 
 # Enable the clock feature for chrono.
 chrono-clock = [ "chrono", "chrono/clock" ]
+
+# Enable impls of [To|Into]BoundedStatic for types in the jiff crate.
+jiff = [ "dep:jiff", "jiff/alloc" ]
 
 [dependencies]
 bounded-static-derive = { workspace = true, optional = true }
@@ -36,6 +39,7 @@ smallvec = { workspace = true, optional = true, default-features = false }
 smartstring = { workspace = true, optional = true, default-features = false }
 ahash = { workspace = true, optional = true, default-features = false }
 chrono = { workspace = true, optional = true, default-features = false }
+jiff = { workspace = true, optional = true, default-features = false }
 
 [dev-dependencies]
 test-case.workspace = true
