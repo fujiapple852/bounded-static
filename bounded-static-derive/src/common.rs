@@ -75,7 +75,7 @@ pub(super) fn check_field(field: &Field) {
                 )
             }
         }
-    };
+    }
 }
 
 /// The generic parameters of the `Static` associated type for `TargetTrait`.
