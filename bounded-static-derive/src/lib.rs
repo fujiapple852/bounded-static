@@ -8,7 +8,7 @@
 //! The [`ToStatic`] macro should be used via the [`bounded-static`](https://docs.rs/bounded-static/0.8.0) crate
 //! rather than using this crate directly.
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, rust_2018_idioms)]
-#![allow(clippy::redundant_pub_crate)]
+#![allow(clippy::redundant_pub_crate, clippy::needless_for_each)]
 #![forbid(unsafe_code)]
 
 use proc_macro2::TokenStream;
