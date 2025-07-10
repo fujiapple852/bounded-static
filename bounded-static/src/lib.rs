@@ -55,14 +55,14 @@
 //!
 //! Additional implementations for 3rd party types are available by enabling the following features:
 //!
-//! - `smol_str` for [`SmolStr`](https://docs.rs/smol_str/0.2.2/smol_str/struct.SmolStr.html)
-//! - `smallvec` for [`SmallVec`](https://docs.rs/smallvec/1.13.2/smallvec/struct.SmallVec.html)
-//! - `smartstring` for [`SmartString`](https://docs.rs/smartstring/1.0.1/smartstring/index.html)
-//! - `ahash` for:
+//! - `smol_str-02` for [`SmolStr`](https://docs.rs/smol_str/0.2.2/smol_str/struct.SmolStr.html)
+//! - `smallvec-1` for [`SmallVec`](https://docs.rs/smallvec/1.13.2/smallvec/struct.SmallVec.html)
+//! - `smartstring-1` for [`SmartString`](https://docs.rs/smartstring/1.0.1/smartstring/index.html)
+//! - `ahash-08` for:
 //!     - [`RandomState`](https://docs.rs/ahash/0.8.6/ahash/random_state/struct.RandomState.html)
 //!     - [`AHashMap`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashMap.html)
 //!     - [`AHashSet`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashSet.html)
-//! - `chrono` for:
+//! - `chrono-04` for:
 //!     - [`DateTime`](https://docs.rs/chrono/0.4.38/chrono/struct.DateTime.html)
 //!     - [`FixedOffset`](https://docs.rs/chrono/0.4.38/chrono/struct.FixedOffset.html)
 //!     - [`Months`](https://docs.rs/chrono/0.4.38/chrono/struct.Months.html)
@@ -75,7 +75,7 @@
 //!     - [`NaiveDate`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveDate.html)
 //!     - [`NaiveDateTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveDateTime.html)
 //!     - [`NaiveTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveTime.html)
-//! - `chrono-clock` for:
+//! - `chrono-clock-04` for:
 //!    - [`Local`](https://docs.rs/chrono/0.4.38/chrono/struct.Local.html)
 //!
 //! # Examples
@@ -802,8 +802,8 @@ impl ToBoundedStatic for std::collections::hash_map::RandomState {
 }
 
 /// [`ToBoundedStatic`] impl for `smol_str::SmolStr`.
-#[cfg(feature = "smol_str")]
-impl ToBoundedStatic for smol_str::SmolStr {
+#[cfg(feature = "smol_str-02")]
+impl ToBoundedStatic for smol_str_02::SmolStr {
     type Static = Self;
 
     fn to_static(&self) -> Self::Static {
@@ -812,8 +812,8 @@ impl ToBoundedStatic for smol_str::SmolStr {
 }
 
 /// No-op [`IntoBoundedStatic`] impl for `smol_str::SmolStr`.
-#[cfg(feature = "smol_str")]
-impl IntoBoundedStatic for smol_str::SmolStr {
+#[cfg(feature = "smol_str-02")]
+impl IntoBoundedStatic for smol_str_02::SmolStr {
     type Static = Self;
 
     fn into_static(self) -> Self::Static {
@@ -822,14 +822,14 @@ impl IntoBoundedStatic for smol_str::SmolStr {
 }
 
 /// [`ToBoundedStatic`] impl for `smallvec::SmallVec`.
-#[cfg(feature = "smallvec")]
-impl<A, T> ToBoundedStatic for smallvec::SmallVec<A>
+#[cfg(feature = "smallvec-1")]
+impl<A, T> ToBoundedStatic for smallvec_1::SmallVec<A>
 where
-    A: smallvec::Array<Item = T> + ToBoundedStatic,
+    A: smallvec_1::Array<Item = T> + ToBoundedStatic,
     T: ToBoundedStatic,
-    <A as ToBoundedStatic>::Static: smallvec::Array<Item = T::Static>,
+    <A as ToBoundedStatic>::Static: smallvec_1::Array<Item = T::Static>,
 {
-    type Static = smallvec::SmallVec<A::Static>;
+    type Static = smallvec_1::SmallVec<A::Static>;
 
     fn to_static(&self) -> Self::Static {
         self.iter().map(ToBoundedStatic::to_static).collect()
@@ -837,14 +837,14 @@ where
 }
 
 /// [`IntoBoundedStatic`] impl for `smallvec::SmallVec`.
-#[cfg(feature = "smallvec")]
-impl<A, T> IntoBoundedStatic for smallvec::SmallVec<A>
+#[cfg(feature = "smallvec-1")]
+impl<A, T> IntoBoundedStatic for smallvec_1::SmallVec<A>
 where
-    A: smallvec::Array<Item = T> + IntoBoundedStatic,
+    A: smallvec_1::Array<Item = T> + IntoBoundedStatic,
     T: IntoBoundedStatic,
-    <A as IntoBoundedStatic>::Static: smallvec::Array<Item = T::Static>,
+    <A as IntoBoundedStatic>::Static: smallvec_1::Array<Item = T::Static>,
 {
-    type Static = smallvec::SmallVec<A::Static>;
+    type Static = smallvec_1::SmallVec<A::Static>;
 
     fn into_static(self) -> Self::Static {
         self.into_iter()
@@ -854,10 +854,10 @@ where
 }
 
 /// [`ToBoundedStatic`] impl for `smartstring::SmartString`.
-#[cfg(feature = "smartstring")]
-impl<Mode> ToBoundedStatic for smartstring::SmartString<Mode>
+#[cfg(feature = "smartstring-1")]
+impl<Mode> ToBoundedStatic for smartstring_1::SmartString<Mode>
 where
-    Mode: smartstring::SmartStringMode + 'static,
+    Mode: smartstring_1::SmartStringMode + 'static,
 {
     type Static = Self;
 
@@ -867,10 +867,10 @@ where
 }
 
 /// No-op [`IntoBoundedStatic`] impl for `smartstring::SmartString`.
-#[cfg(feature = "smartstring")]
-impl<Mode> IntoBoundedStatic for smartstring::SmartString<Mode>
+#[cfg(feature = "smartstring-1")]
+impl<Mode> IntoBoundedStatic for smartstring_1::SmartString<Mode>
 where
-    Mode: smartstring::SmartStringMode + 'static,
+    Mode: smartstring_1::SmartStringMode + 'static,
 {
     type Static = Self;
 
@@ -879,9 +879,9 @@ where
     }
 }
 
-#[cfg(feature = "ahash")]
+#[cfg(feature = "ahash-08")]
 /// [`ToBoundedStatic`] impl for `ahash::RandomState`.
-impl ToBoundedStatic for ahash::RandomState {
+impl ToBoundedStatic for ahash_08::RandomState {
     type Static = Self;
 
     fn to_static(&self) -> Self::Static {
@@ -889,9 +889,9 @@ impl ToBoundedStatic for ahash::RandomState {
     }
 }
 
-#[cfg(all(feature = "ahash", feature = "std"))]
+#[cfg(all(feature = "ahash-08", feature = "std"))]
 /// Blanket [`ToBoundedStatic`] impl for converting `ahash::AHashMap<K, V, S>` to `ahash::AHashMap<K, V, S>: 'static`.
-impl<K, V, S> ToBoundedStatic for ahash::AHashMap<K, V, S>
+impl<K, V, S> ToBoundedStatic for ahash_08::AHashMap<K, V, S>
 where
     K: ToBoundedStatic,
     K::Static: Eq + std::hash::Hash,
@@ -899,19 +899,19 @@ where
     S: ToBoundedStatic,
     S::Static: std::hash::BuildHasher,
 {
-    type Static = ahash::AHashMap<K::Static, V::Static, S::Static>;
+    type Static = ahash_08::AHashMap<K::Static, V::Static, S::Static>;
 
     fn to_static(&self) -> Self::Static {
         let mut map =
-            ahash::AHashMap::with_capacity_and_hasher(self.len(), self.hasher().to_static());
+            ahash_08::AHashMap::with_capacity_and_hasher(self.len(), self.hasher().to_static());
         map.extend(self.iter().map(|(k, v)| (k.to_static(), v.to_static())));
         map
     }
 }
 
-#[cfg(all(feature = "ahash", feature = "std"))]
+#[cfg(all(feature = "ahash-08", feature = "std"))]
 /// Blanket [`IntoBoundedStatic`] impl for converting `ahash::AHashMap<K, V, S>` into `ahash::AHashMap<K, V, S>: 'static`.
-impl<K, V, S> IntoBoundedStatic for ahash::AHashMap<K, V, S>
+impl<K, V, S> IntoBoundedStatic for ahash_08::AHashMap<K, V, S>
 where
     K: IntoBoundedStatic,
     K::Static: Eq + std::hash::Hash,
@@ -919,11 +919,11 @@ where
     S: ToBoundedStatic,
     S::Static: std::hash::BuildHasher,
 {
-    type Static = ahash::AHashMap<K::Static, V::Static, S::Static>;
+    type Static = ahash_08::AHashMap<K::Static, V::Static, S::Static>;
 
     fn into_static(self) -> Self::Static {
         let mut map =
-            ahash::AHashMap::with_capacity_and_hasher(self.len(), self.hasher().to_static());
+            ahash_08::AHashMap::with_capacity_and_hasher(self.len(), self.hasher().to_static());
         map.extend(
             self.into_iter()
                 .map(|(k, v)| (k.into_static(), v.into_static())),
@@ -932,96 +932,96 @@ where
     }
 }
 
-#[cfg(all(feature = "ahash", feature = "std"))]
+#[cfg(all(feature = "ahash-08", feature = "std"))]
 /// Blanket [`ToBoundedStatic`] impl for converting `ahash::AHashSet<T, S>` to `ahash::AHashSet<T, S>: 'static`.
-impl<T, S> ToBoundedStatic for ahash::AHashSet<T, S>
+impl<T, S> ToBoundedStatic for ahash_08::AHashSet<T, S>
 where
     T: ToBoundedStatic,
     T::Static: Eq + std::hash::Hash,
     S: ToBoundedStatic,
     S::Static: std::hash::BuildHasher,
 {
-    type Static = ahash::AHashSet<T::Static, S::Static>;
+    type Static = ahash_08::AHashSet<T::Static, S::Static>;
 
     fn to_static(&self) -> Self::Static {
         let mut set =
-            ahash::AHashSet::with_capacity_and_hasher(self.len(), self.hasher().to_static());
+            ahash_08::AHashSet::with_capacity_and_hasher(self.len(), self.hasher().to_static());
         set.extend(self.iter().map(ToBoundedStatic::to_static));
         set
     }
 }
 
-#[cfg(all(feature = "ahash", feature = "std"))]
+#[cfg(all(feature = "ahash-08", feature = "std"))]
 /// Blanket [`IntoBoundedStatic`] impl for converting `ahash::AHashSet<T, S>` into `ahash::AHashSet<T, S>: 'static`.
-impl<T, S> IntoBoundedStatic for ahash::AHashSet<T, S>
+impl<T, S> IntoBoundedStatic for ahash_08::AHashSet<T, S>
 where
     T: IntoBoundedStatic,
     T::Static: Eq + std::hash::Hash,
     S: ToBoundedStatic,
     S::Static: std::hash::BuildHasher,
 {
-    type Static = ahash::AHashSet<T::Static, S::Static>;
+    type Static = ahash_08::AHashSet<T::Static, S::Static>;
 
     fn into_static(self) -> Self::Static {
         let mut set =
-            ahash::AHashSet::with_capacity_and_hasher(self.len(), self.hasher().to_static());
+            ahash_08::AHashSet::with_capacity_and_hasher(self.len(), self.hasher().to_static());
         set.extend(self.into_iter().map(IntoBoundedStatic::into_static));
         set
     }
 }
 
-#[cfg(feature = "chrono")]
+#[cfg(feature = "chrono-04")]
 /// Blanket [`ToBoundedStatic`] impl for converting `chrono::DateTime<Tz>` into `chrono::DateTime<Tz>: 'static`.
-impl<Tz> ToBoundedStatic for chrono::DateTime<Tz>
+impl<Tz> ToBoundedStatic for chrono_04::DateTime<Tz>
 where
-    Tz: ToBoundedStatic + chrono::TimeZone,
-    Tz::Static: chrono::TimeZone,
+    Tz: ToBoundedStatic + chrono_04::TimeZone,
+    Tz::Static: chrono_04::TimeZone,
 {
-    type Static = chrono::DateTime<Tz::Static>;
+    type Static = chrono_04::DateTime<Tz::Static>;
 
     fn to_static(&self) -> Self::Static {
         self.with_timezone(&self.timezone().to_static())
     }
 }
 
-#[cfg(feature = "chrono")]
+#[cfg(feature = "chrono-04")]
 /// Blanket [`IntoBoundedStatic`] impl for converting `chrono::DateTime<Tz>` into `chrono::DateTime<Tz>: 'static`.
-impl<Tz> IntoBoundedStatic for chrono::DateTime<Tz>
+impl<Tz> IntoBoundedStatic for chrono_04::DateTime<Tz>
 where
-    Tz: IntoBoundedStatic + chrono::TimeZone,
-    Tz::Static: chrono::TimeZone,
+    Tz: IntoBoundedStatic + chrono_04::TimeZone,
+    Tz::Static: chrono_04::TimeZone,
 {
-    type Static = chrono::DateTime<Tz::Static>;
+    type Static = chrono_04::DateTime<Tz::Static>;
 
     fn into_static(self) -> Self::Static {
         self.with_timezone(&self.timezone().into_static())
     }
 }
 
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::FixedOffset);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::Months);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::TimeDelta);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::Utc);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::Month);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::Weekday);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::naive::Days);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::naive::IsoWeek);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::naive::NaiveDate);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::naive::NaiveDateTime);
-#[cfg(feature = "chrono")]
-make_copy_impl!(chrono::naive::NaiveTime);
-#[cfg(feature = "chrono-clock")]
-make_copy_impl!(chrono::Local);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::FixedOffset);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::Months);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::TimeDelta);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::Utc);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::Month);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::Weekday);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::naive::Days);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::naive::IsoWeek);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::naive::NaiveDate);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::naive::NaiveDateTime);
+#[cfg(feature = "chrono-04")]
+make_copy_impl!(chrono_04::naive::NaiveTime);
+#[cfg(feature = "chrono-clock-04")]
+make_copy_impl!(chrono_04::Local);
 // No implementation for chrono::NaiveWeek as it's not Copy nor Clone.
 
 #[cfg(test)]
@@ -1569,7 +1569,7 @@ mod std_tests {
     }
 }
 
-#[cfg(feature = "smol_str")]
+#[cfg(feature = "smol_str-02")]
 #[cfg(test)]
 mod smol_str_tests {
     use super::*;
@@ -1580,12 +1580,12 @@ mod smol_str_tests {
 
     #[test]
     fn test_smol_str() {
-        ensure_static(smol_str::SmolStr::new("smol").to_static());
-        ensure_static(smol_str::SmolStr::new("smol").into_static());
+        ensure_static(smol_str_02::SmolStr::new("smol").to_static());
+        ensure_static(smol_str_02::SmolStr::new("smol").into_static());
     }
 }
 
-#[cfg(feature = "smallvec")]
+#[cfg(feature = "smallvec-1")]
 #[cfg(test)]
 mod smallvec_tests {
     use super::*;
@@ -1596,7 +1596,7 @@ mod smallvec_tests {
 
     #[test]
     fn test_smallvec1() {
-        let vec: smallvec::SmallVec<[usize; 0]> = smallvec::SmallVec::new();
+        let vec: smallvec_1::SmallVec<[usize; 0]> = smallvec_1::SmallVec::new();
         ensure_static(vec.to_static());
         ensure_static(vec.into_static());
     }
@@ -1604,7 +1604,7 @@ mod smallvec_tests {
     #[test]
     fn test_smallvec2() {
         let buf = [1, 2, 3, 4, 5];
-        let small_vec: smallvec::SmallVec<_> = smallvec::SmallVec::from_buf(buf);
+        let small_vec: smallvec_1::SmallVec<_> = smallvec_1::SmallVec::from_buf(buf);
         ensure_static(small_vec.to_static());
         ensure_static(small_vec.into_static());
     }
@@ -1614,17 +1614,17 @@ mod smallvec_tests {
         let x = String::from("foo");
         let y = String::from("bar");
         let buf = [Cow::Borrowed(x.as_str()), Cow::Borrowed(y.as_str())];
-        let small_vec: smallvec::SmallVec<_> = smallvec::SmallVec::from_buf(buf);
+        let small_vec: smallvec_1::SmallVec<_> = smallvec_1::SmallVec::from_buf(buf);
         ensure_static(small_vec.to_static());
         ensure_static(small_vec.into_static());
     }
 }
 
-#[cfg(feature = "smartstring")]
+#[cfg(feature = "smartstring-1")]
 #[cfg(test)]
 mod smartstring_tests {
     use super::*;
-    use smartstring::alias::String;
+    use smartstring_1::alias::String;
 
     fn ensure_static<T: 'static>(t: T) {
         drop(t);
@@ -1638,7 +1638,7 @@ mod smartstring_tests {
     }
 }
 
-#[cfg(feature = "ahash")]
+#[cfg(feature = "ahash-08")]
 #[cfg(test)]
 mod ahash_tests {
     use super::*;
@@ -1649,7 +1649,7 @@ mod ahash_tests {
 
     #[test]
     fn test_ahash_random_state() {
-        ensure_static(ahash::RandomState::new().to_static());
+        ensure_static(ahash_08::RandomState::new().to_static());
     }
 
     #[cfg(feature = "std")]
@@ -1657,7 +1657,7 @@ mod ahash_tests {
     fn test_ahash_ahashmap() {
         let k = String::from("key");
         let v = String::from("value");
-        let value = ahash::AHashMap::from([(Cow::from(&k), Cow::from(&v))]);
+        let value = ahash_08::AHashMap::from([(Cow::from(&k), Cow::from(&v))]);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
@@ -1666,13 +1666,13 @@ mod ahash_tests {
     #[test]
     fn test_ahash_ahashset() {
         let value = String::from("data");
-        let value = ahash::AHashSet::from([(Cow::from(&value))]);
+        let value = ahash_08::AHashSet::from([(Cow::from(&value))]);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 }
 
-#[cfg(feature = "chrono")]
+#[cfg(feature = "chrono-04")]
 #[cfg(test)]
 mod chrono_tests {
     use super::*;
@@ -1683,7 +1683,7 @@ mod chrono_tests {
 
     #[test]
     fn test_chrono_datetime() {
-        let value = chrono::Utc::now();
+        let value = chrono_04::Utc::now();
         let to_static = value.to_static();
         assert_eq!(value, to_static);
         ensure_static(to_static);
@@ -1691,7 +1691,7 @@ mod chrono_tests {
 
     #[test]
     fn test_chrono_datetime_with_custom_tz() {
-        use chrono::{
+        use chrono_04::{
             DateTime, FixedOffset, MappedLocalTime, NaiveDate, NaiveDateTime, Offset, TimeZone,
         };
         #[derive(Debug, Clone)]
@@ -1745,57 +1745,57 @@ mod chrono_tests {
 
     #[test]
     fn test_chrono_fixed_offset() {
-        let value = chrono::FixedOffset::east_opt(1).unwrap();
+        let value = chrono_04::FixedOffset::east_opt(1).unwrap();
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_months() {
-        let value = chrono::Months::new(1);
+        let value = chrono_04::Months::new(1);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_time_delta() {
-        let value = chrono::TimeDelta::days(10);
+        let value = chrono_04::TimeDelta::days(10);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_utc() {
-        let value = chrono::Utc;
+        let value = chrono_04::Utc;
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_month() {
-        let value = chrono::Month::January;
+        let value = chrono_04::Month::January;
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_weekday() {
-        let value = chrono::Weekday::Mon;
+        let value = chrono_04::Weekday::Mon;
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_naive_days() {
-        let value = chrono::naive::Days::new(1);
+        let value = chrono_04::naive::Days::new(1);
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_naive_iso_week() {
-        use chrono::Datelike;
-        let value = chrono::naive::NaiveDate::from_ymd_opt(2024, 6, 1)
+        use chrono_04::Datelike;
+        let value = chrono_04::naive::NaiveDate::from_ymd_opt(2024, 6, 1)
             .unwrap()
             .iso_week();
         let to_static = value.to_static();
@@ -1804,16 +1804,16 @@ mod chrono_tests {
 
     #[test]
     fn test_chrono_naive_date() {
-        let value = chrono::naive::NaiveDate::from_ymd_opt(2024, 6, 1).unwrap();
+        let value = chrono_04::naive::NaiveDate::from_ymd_opt(2024, 6, 1).unwrap();
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 
     #[test]
     fn test_chrono_naive_date_time() {
-        let value = chrono::naive::NaiveDateTime::new(
-            chrono::NaiveDate::from_ymd_opt(2024, 6, 1).unwrap(),
-            chrono::NaiveTime::from_hms_opt(22, 33, 44).unwrap(),
+        let value = chrono_04::naive::NaiveDateTime::new(
+            chrono_04::NaiveDate::from_ymd_opt(2024, 6, 1).unwrap(),
+            chrono_04::NaiveTime::from_hms_opt(22, 33, 44).unwrap(),
         );
         let to_static = value.to_static();
         ensure_static(to_static);
@@ -1821,13 +1821,13 @@ mod chrono_tests {
 
     #[test]
     fn test_chrono_naive_time() {
-        let value = chrono::naive::NaiveTime::from_hms_opt(22, 33, 44).unwrap();
+        let value = chrono_04::naive::NaiveTime::from_hms_opt(22, 33, 44).unwrap();
         let to_static = value.to_static();
         ensure_static(to_static);
     }
 }
 
-#[cfg(feature = "chrono-clock")]
+#[cfg(feature = "chrono-clock-04")]
 #[cfg(test)]
 mod chrono_clock_tests {
     use super::*;
@@ -1838,7 +1838,7 @@ mod chrono_clock_tests {
 
     #[test]
     fn test_chrono_local() {
-        let value = chrono::Local::now();
+        let value = chrono_04::Local::now();
         let to_static = value.to_static();
         ensure_static(to_static);
     }
