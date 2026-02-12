@@ -9,7 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Increased MSRV to `1.71`
+- Changed MSRV to `1.71`
 
 ## [bounded-static-0.8.0] & [bounded-static-derive-0.8.0] - 2024-06-23
 
