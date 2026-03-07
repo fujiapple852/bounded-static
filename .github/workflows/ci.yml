@@ -53,41 +53,41 @@ jobs:
           command: check
           args: --workspace --no-default-features --features derive
 
-      - name: check --no-default-features --features smol_str
+      - name: check --no-default-features --features smol_str-02
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --workspace --no-default-features --features smol_str
+          args: --workspace --no-default-features --features smol_str-02
 
-      - name: check --no-default-features --features smallvec
+      - name: check --no-default-features --features smallvec-1
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --workspace --no-default-features --features smallvec
+          args: --workspace --no-default-features --features smallvec-1
 
-      - name: check --no-default-features --features smartstring
+      - name: check --no-default-features --features smartstring-1
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --workspace --no-default-features --features smartstring
+          args: --workspace --no-default-features --features smartstring-1
 
-      - name: check --no-default-features --features ahash
+      - name: check --no-default-features --features ahash-08
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --workspace --no-default-features --features ahash
+          args: --workspace --no-default-features --features ahash-08
 
-      - name: check --no-default-features --features chrono
+      - name: check --no-default-features --features chrono-04
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --workspace --no-default-features --features chrono
+          args: --workspace --no-default-features --features chrono-04
 
-      - name: check --no-default-features --features chrono-clock
+      - name: check --no-default-features --features chrono-clock-04
         uses: actions-rs/cargo@v1
         with:
           command: check
-          args: --workspace --no-default-features --features chrono-clock
+          args: --workspace --no-default-features --features chrono-clock-04
 
       - name: check --all-features
         uses: actions-rs/cargo@v1
