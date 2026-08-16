@@ -1,22 +1,6 @@
-use crate::{IntoBoundedStatic, ToBoundedStatic};
+use crate::{macros, IntoBoundedStatic, ToBoundedStatic};
 
-/// [`ToBoundedStatic`] impl for `smol_str::SmolStr`.
-impl ToBoundedStatic for smol_str::SmolStr {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
-
-/// No-op [`IntoBoundedStatic`] impl for `smol_str::SmolStr`.
-impl IntoBoundedStatic for smol_str::SmolStr {
-    type Static = Self;
-
-    fn into_static(self) -> Self::Static {
-        self
-    }
-}
+macros::make_clone_impl!(smol_str::SmolStr);
 
 #[cfg(test)]
 mod tests {

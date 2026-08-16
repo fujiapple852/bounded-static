@@ -1,16 +1,6 @@
-use crate::ToBoundedStatic;
+use crate::{macros, IntoBoundedStatic, ToBoundedStatic};
 
-#[cfg(feature = "std")]
-use crate::IntoBoundedStatic;
-
-/// [`ToBoundedStatic`] impl for `ahash::RandomState`.
-impl ToBoundedStatic for ahash::RandomState {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
+macros::make_clone_impl!(ahash::RandomState);
 
 /// Blanket [`ToBoundedStatic`] impl for converting `ahash::AHashMap<K, V, S>` to `ahash::AHashMap<K, V, S>: 'static`.
 #[cfg(feature = "std")]

@@ -5,7 +5,7 @@ use alloc::{
     vec::Vec,
 };
 
-use crate::{IntoBoundedStatic, ToBoundedStatic};
+use crate::{macros, IntoBoundedStatic, ToBoundedStatic};
 
 /// Blanket [`ToBoundedStatic`] impl for converting `Cow<'a, T: ?Sized>` to `Cow<'static, T: ?Sized>`.
 impl<T> ToBoundedStatic for Cow<'_, T>
@@ -31,23 +31,7 @@ where
     }
 }
 
-/// [`ToBoundedStatic`] impl for `String`.
-impl ToBoundedStatic for String {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
-
-/// No-op [`IntoBoundedStatic`] impl for `String`.
-impl IntoBoundedStatic for String {
-    type Static = Self;
-
-    fn into_static(self) -> Self::Static {
-        self
-    }
-}
+macros::make_clone_impl!(String);
 
 /// Blanket [`ToBoundedStatic`] impl for converting `Vec<T>` to `Vec<T>: 'static`.
 impl<T> ToBoundedStatic for Vec<T>
