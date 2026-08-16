@@ -57,7 +57,6 @@
 //!
 //! - `smol_str` for [`SmolStr`](https://docs.rs/smol_str/0.2.2/smol_str/struct.SmolStr.html)
 //! - `smallvec` for [`SmallVec`](https://docs.rs/smallvec/1.13.2/smallvec/struct.SmallVec.html)
-//! - `smartstring` for [`SmartString`](https://docs.rs/smartstring/1.0.1/smartstring/index.html)
 //! - `ahash` for:
 //!     - [`RandomState`](https://docs.rs/ahash/0.8.6/ahash/random_state/struct.RandomState.html)
 //!     - [`AHashMap`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashMap.html)
@@ -853,32 +852,6 @@ where
     }
 }
 
-/// [`ToBoundedStatic`] impl for `smartstring::SmartString`.
-#[cfg(feature = "smartstring")]
-impl<Mode> ToBoundedStatic for smartstring::SmartString<Mode>
-where
-    Mode: smartstring::SmartStringMode + 'static,
-{
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
-
-/// No-op [`IntoBoundedStatic`] impl for `smartstring::SmartString`.
-#[cfg(feature = "smartstring")]
-impl<Mode> IntoBoundedStatic for smartstring::SmartString<Mode>
-where
-    Mode: smartstring::SmartStringMode + 'static,
-{
-    type Static = Self;
-
-    fn into_static(self) -> Self::Static {
-        self
-    }
-}
-
 #[cfg(feature = "ahash")]
 /// [`ToBoundedStatic`] impl for `ahash::RandomState`.
 impl ToBoundedStatic for ahash::RandomState {
@@ -1617,24 +1590,6 @@ mod smallvec_tests {
         let small_vec: smallvec::SmallVec<_> = smallvec::SmallVec::from_buf(buf);
         ensure_static(small_vec.to_static());
         ensure_static(small_vec.into_static());
-    }
-}
-
-#[cfg(feature = "smartstring")]
-#[cfg(test)]
-mod smartstring_tests {
-    use super::*;
-    use smartstring::alias::String;
-
-    fn ensure_static<T: 'static>(t: T) {
-        drop(t);
-    }
-
-    #[test]
-    fn test_smartstring() {
-        let string = String::from("test");
-        ensure_static(string.to_static());
-        ensure_static(string.into_static());
     }
 }
 

@@ -21,6 +21,5 @@ proc-macro2 = "1.0.69"
 test-case = "3.3.1"
 smol_str = { version = "0.2.2", default-features = false }
 smallvec = { version = "1.13.2", default-features = false }
-smartstring = { version = "1.0.1", default-features = false }
 ahash = { version = "0.8.11", default-features = false }
 chrono = { version = "0.4.38", default-features = false }

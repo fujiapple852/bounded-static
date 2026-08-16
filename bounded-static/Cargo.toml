@@ -33,7 +33,6 @@ chrono-clock = [ "chrono", "chrono/clock" ]
 bounded-static-derive = { workspace = true, optional = true }
 smol_str = { workspace = true, optional = true, default-features = false }
 smallvec = { workspace = true, optional = true, default-features = false }
-smartstring = { workspace = true, optional = true, default-features = false }
 ahash = { workspace = true, optional = true, default-features = false }
 chrono = { workspace = true, optional = true, default-features = false }
 

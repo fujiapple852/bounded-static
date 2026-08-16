@@ -11,6 +11,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Increased MSRV to `1.71`
 
+### Removed
+
+- Removed support for `smartstring::SmartString` which
+  is [unmaintained](https://rustsec.org/advisories/RUSTSEC-2026-0249).
+
 ## [bounded-static-0.8.0] & [bounded-static-derive-0.8.0] - 2024-06-23
 
 ### Added
