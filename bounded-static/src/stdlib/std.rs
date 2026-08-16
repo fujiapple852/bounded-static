@@ -1,4 +1,4 @@
-use crate::{IntoBoundedStatic, ToBoundedStatic};
+use crate::{macros, IntoBoundedStatic, ToBoundedStatic};
 
 /// Blanket [`ToBoundedStatic`] impl for converting `HashMap<K, V>` to `HashMap<K, V>: 'static`.
 impl<K, V, S> ToBoundedStatic for std::collections::HashMap<K, V, S>
@@ -85,14 +85,7 @@ where
     }
 }
 
-/// [`ToBoundedStatic`] impl for `std::collections::hash_map::RandomState`.
-impl ToBoundedStatic for std::collections::hash_map::RandomState {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
+macros::make_clone_impl!(std::collections::hash_map::RandomState);
 
 #[cfg(test)]
 mod tests {

@@ -14,54 +14,9 @@ macros::make_copy_impl!(jiff::tz::AmbiguousOffset);
 macros::make_copy_impl!(jiff::tz::AmbiguousTimestamp);
 macros::make_copy_impl!(jiff::tz::Dst);
 macros::make_copy_impl!(jiff::tz::Offset);
-
-impl ToBoundedStatic for jiff::Zoned {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
-
-impl IntoBoundedStatic for jiff::Zoned {
-    type Static = Self;
-
-    fn into_static(self) -> Self::Static {
-        self
-    }
-}
-
-impl ToBoundedStatic for jiff::tz::AmbiguousZoned {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
-
-impl IntoBoundedStatic for jiff::tz::AmbiguousZoned {
-    type Static = Self;
-
-    fn into_static(self) -> Self::Static {
-        self
-    }
-}
-
-impl ToBoundedStatic for jiff::tz::TimeZone {
-    type Static = Self;
-
-    fn to_static(&self) -> Self::Static {
-        self.clone()
-    }
-}
-
-impl IntoBoundedStatic for jiff::tz::TimeZone {
-    type Static = Self;
-
-    fn into_static(self) -> Self::Static {
-        self
-    }
-}
+macros::make_clone_impl!(jiff::Zoned);
+macros::make_clone_impl!(jiff::tz::AmbiguousZoned);
+macros::make_clone_impl!(jiff::tz::TimeZone);
 
 #[cfg(test)]
 mod tests {
