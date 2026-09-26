@@ -39,6 +39,8 @@ jiff = { workspace = true, optional = true, default-features = false }
 
 [dev-dependencies]
 test-case.workspace = true
+test-case-macros.workspace = true
+test-case-core.workspace = true
 
 [package.metadata.docs.rs]
 all-features = true
