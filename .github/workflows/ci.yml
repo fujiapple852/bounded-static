@@ -71,18 +71,6 @@ jobs:
           command: check
           args: --workspace --no-default-features --features ahash
 
-      - name: check --no-default-features --features chrono
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
-          args: --workspace --no-default-features --features chrono
-
-      - name: check --no-default-features --features chrono-clock
-        uses: actions-rs/cargo@v1
-        with:
-          command: check
-          args: --workspace --no-default-features --features chrono-clock
-
       - name: check --no-default-features --features jiff
         uses: actions-rs/cargo@v1
         with:
