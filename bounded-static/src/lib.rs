@@ -61,21 +61,6 @@
 //!     - [`RandomState`](https://docs.rs/ahash/0.8.6/ahash/random_state/struct.RandomState.html)
 //!     - [`AHashMap`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashMap.html)
 //!     - [`AHashSet`](https://docs.rs/ahash/0.8.6/ahash/struct.AHashSet.html)
-//! - `chrono` for:
-//!     - [`DateTime`](https://docs.rs/chrono/0.4.38/chrono/struct.DateTime.html)
-//!     - [`FixedOffset`](https://docs.rs/chrono/0.4.38/chrono/struct.FixedOffset.html)
-//!     - [`Months`](https://docs.rs/chrono/0.4.38/chrono/struct.Months.html)
-//!     - [`TimeDelta`](https://docs.rs/chrono/0.4.38/chrono/struct.TimeDelta.html)
-//!     - [`Utc`](https://docs.rs/chrono/0.4.38/chrono/struct.Utc.html)
-//!     - [`Month`](https://docs.rs/chrono/0.4.38/chrono/enum.Month.html)
-//!     - [`Weekday`](https://docs.rs/chrono/0.4.38/chrono/enum.Weekday.html)
-//!     - [`Days`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.Days.html)
-//!     - [`IsoWeek`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.IsoWeek.html)
-//!     - [`NaiveDate`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveDate.html)
-//!     - [`NaiveDateTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveDateTime.html)
-//!     - [`NaiveTime`](https://docs.rs/chrono/0.4.38/chrono/naive/struct.NaiveTime.html)
-//! - `chrono-clock` for:
-//!    - [`Local`](https://docs.rs/chrono/0.4.38/chrono/struct.Local.html)
 //! - `jiff` for:
 //!     - [`Zoned`](https://docs.rs/jiff/0.2.25/jiff/struct.Zoned.html)
 //!     - [`Timestamp`](https://docs.rs/jiff/0.2.25/jiff/struct.Timestamp.html)

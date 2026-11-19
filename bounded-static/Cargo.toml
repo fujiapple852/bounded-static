@@ -21,20 +21,16 @@ alloc = []
 collections = [ "alloc" ]
 
 # Enable impls of [To|Into]BoundedStatic for other types in std.
-std = [ "alloc", "ahash?/std", "chrono?/std", "jiff?/std" ]
+std = [ "alloc", "ahash?/std", "jiff?/std" ]
 
 # Enable the ToStatic custom derive macro.
 derive = [ "bounded-static-derive" ]
-
-# Enable the clock feature for chrono.
-chrono-clock = [ "chrono", "chrono/clock" ]
 
 [dependencies]
 bounded-static-derive = { workspace = true, optional = true }
 smol_str = { workspace = true, optional = true, default-features = false }
 smallvec = { workspace = true, optional = true, default-features = false }
 ahash = { workspace = true, optional = true, default-features = false }
-chrono = { workspace = true, optional = true, default-features = false }
 jiff = { workspace = true, optional = true, default-features = false }
 
 [dev-dependencies]

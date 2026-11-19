@@ -19,6 +19,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Removed support for `smartstring::SmartString` which
   is [unmaintained](https://rustsec.org/advisories/RUSTSEC-2026-0249).
+- Removed support for `chrono` which is [unmaintained](https://rustsec.org/advisories/RUSTSEC-2026-0543).
 
 ## [bounded-static-0.8.0] & [bounded-static-derive-0.8.0] - 2024-06-23
 
